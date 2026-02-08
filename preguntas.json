@@ -1,0 +1,106 @@
+{
+    "preguntas": [
+        {
+            "id": 1,
+            "pregunta": "¿Dónde fue nuestra primera cita?",
+            "opciones": {
+                "A": "Un restaurante",
+                "B": "En casa",
+                "C": "Kantrika"
+            },
+            "correcta": "C"
+        },
+        {
+            "id": 2,
+            "pregunta": "¿Cuál es mi color favorito?",
+            "opciones": {
+                "A": "Negro",
+                "B": "Rojo",
+                "C": "Verde"
+            },
+            "correcta": "A"
+        },
+        {
+            "id": 3,
+            "pregunta": "¿Cuál es nuestra canción favorita?",
+            "opciones": {
+                "A": "Un reguetón",
+                "B": "Una canción pop",
+                "C": "Una canción de rock"
+            },
+            "correcta": "A"
+        },
+        {
+            "id": 4,
+            "pregunta": "¿Qué me gusta hacer en mi tiempo libre?",
+            "opciones": {
+                "A": "Leer libros",
+                "B": "Estudiar",
+                "C": "Ver películas"
+            },
+            "correcta": "B"
+        },
+        {
+            "id": 5,
+            "pregunta": "¿Cuál es mi comida favorita?",
+            "opciones": {
+                "A": "Pizza",
+                "B": "Pasta",
+                "C": "Pollo"
+            },
+            "correcta": "C"
+        },
+        {
+            "id": 6,
+            "pregunta": "¿Qué día nos conocimos?",
+            "opciones": {
+                "A": "Un lunes",
+                "B": "Un jueves",
+                "C": "Un sábado"
+            },
+            "correcta": "B"
+        },
+        {
+            "id": 7,
+            "pregunta": "¿Cuál es mi película favorita?",
+            "opciones": {
+                "A": "Shallow",
+                "B": "Una película de acción",
+                "C": "Una película de terror"
+            },
+            "correcta": "A"
+        },
+        {
+            "id": 8,
+            "pregunta": "¿Qué me regalaste en nuestro primer aniversario?",
+            "opciones": {
+                "A": "Flores",
+                "B": "Un peluche",
+                "C": "Un anillo"
+            },
+            "correcta": "C"
+        },
+        {
+            "id": 9,
+            "pregunta": "¿Cuál es mi postre favorito?",
+            "opciones": {
+                "A": "Helado",
+                "B": "Chessecake",
+                "C": "Tiramisu"
+            },
+            "correcta": "B"
+        },
+        {
+            "id": 10,
+            "pregunta": "¿Qué es lo que más amo de ti?",
+            "opciones": {
+                "A": "Tu sonrisa",
+                "B": "Tu forma de ser",
+                "C": "Todo de ti"
+            },
+            "correcta": "C"
+        }
+    ],
+    "version": "1.0",
+    "ultima_actualizacion": "2026-02-08"
+}
