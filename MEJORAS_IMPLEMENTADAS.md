@@ -89,7 +89,7 @@ function validarPregunta(pregunta) {
 - `leerTexto()`: Valida entrada de texto antes de TTS
 - `hacerTicTac()`: Valida estado del AudioContext
 
-#### c) Try-Catch en Operaciones Críticas
+#### c) Try-Catch en Operaciones Crític
 - Carga de preguntas
 - Reproducción de audio
 - Acceso a localStorage
