@@ -162,7 +162,50 @@ function validarPregunta(pregunta) {
     return true;
 }
 
-// Función asíncrona para cargar preguntas desde JSON
+// Función asíncrona para cargar preguntas desde Supabase
+async function cargarPreguntasDesdeSupabase() {
+    if (cargaEnProgreso) {
+        console.log('Carga ya en progreso...');
+        return false;
+    }
+    
+    cargaEnProgreso = true;
+    
+    try {
+        console.log('🔄 Cargando preguntas desde Supabase...');
+        
+        // Obtener preguntas desde Supabase
+        const preguntasSupabase = await supabaseQuiz.obtenerPreguntas();
+        
+        if (!preguntasSupabase || preguntasSupabase.length === 0) {
+            throw new Error('No se pudieron cargar preguntas de Supabase');
+        }
+        
+        // Validar preguntas
+        const preguntasValidas = preguntasSupabase.filter(validarPregunta);
+        
+        if (preguntasValidas.length === 0) {
+            throw new Error('No hay preguntas válidas en Supabase');
+        }
+        
+        bancoPreguntas = preguntasValidas;
+        usandoSupabase = true;
+        console.log(`✅ ${bancoPreguntas.length} preguntas cargadas desde Supabase`);
+        cargaEnProgreso = false;
+        return true;
+        
+    } catch (error) {
+        console.error('❌ Error cargando desde Supabase:', error);
+        usandoSupabase = false;
+        
+        // FALLBACK: Cargar desde JSON local
+        console.log('⚠️ Intentando cargar desde JSON local...');
+        cargaEnProgreso = false;
+        return await cargarPreguntasDesdeJSON();
+    }
+}
+
+// Función asíncrona para cargar preguntas desde JSON (FALLBACK)
 async function cargarPreguntasDesdeJSON() {
     if (cargaEnProgreso) {
         console.log('Carga ya en progreso...');
@@ -230,9 +273,10 @@ async function cargarPreguntasDesdeJSON() {
             }
         ];
         
-        console.log('Usando preguntas de fallback');
+        console.log('✅ Usando preguntas de fallback');
         cargaEnProgreso = false;
-        return false;
+        usandoSupabase = false;
+        return true;
     }
 }
 
@@ -281,6 +325,8 @@ let tiempoRestante = 10;
 let intervaloTiempo = null;
 let tiempoRespondido = false;
 let numeroIntento = 1;
+let intentoActualId = null; // ID del intento en Supabase
+let usandoSupabase = false; // Flag para saber si Supabase está disponible
 
 // Audio Context para el sonido de reloj
 let audioContext = null;
@@ -674,11 +720,11 @@ function siguientePregunta() {
         iniciarContador();
     } else {
         // Quiz terminado
-        mostrarResultados();
+        mostrarResultados(); // Llamar sin await porque se maneja internamente
     }
 }
 
-function mostrarResultados() {
+async function mostrarResultados() {
     detenerContador();
     cambiarSeccion(seccionPregunta, seccionResultados);
     
@@ -692,15 +738,38 @@ function mostrarResultados() {
         console.warn('Error deteniendo audio:', error);
     }
     
-    // Guardar intento en persistencia
-    const guardado = persistencia.guardarIntento(puntaje);
-    if (guardado) {
-        console.log('Intento guardado en historial');
-    }
+    // Guardar intento en Supabase o localStorage
+    let stats;
     
-    // Obtener estadísticas
-    const stats = persistencia.obtenerEstadisticas();
-    console.log('Estadísticas:', stats);
+    if (usandoSupabase) {
+        try {
+            const intentoGuardado = await supabaseQuiz.guardarIntento(puntaje);
+            if (intentoGuardado) {
+                intentoActualId = intentoGuardado.id;
+                console.log('✅ Intento guardado en Supabase con ID:', intentoActualId);
+            }
+            
+            // Obtener estadísticas de Supabase
+            stats = await supabaseQuiz.obtenerEstadisticas();
+            console.log('📊 Estadísticas de Supabase:', stats);
+        } catch (error) {
+            console.error('❌ Error guardando en Supabase:', error);
+            // Fallback a localStorage
+            const guardado = persistencia.guardarIntento(puntaje);
+            if (guardado) {
+                console.log('💾 Intento guardado en localStorage');
+            }
+            stats = persistencia.obtenerEstadisticas();
+        }
+    } else {
+        // Usar localStorage
+        const guardado = persistencia.guardarIntento(puntaje);
+        if (guardado) {
+            console.log('💾 Intento guardado en localStorage');
+        }
+        stats = persistencia.obtenerEstadisticas();
+        console.log('📊 Estadísticas locales:', stats);
+    }
     
     try {
         // Actualizar puntaje final
@@ -767,22 +836,52 @@ function reiniciarJuego() {
 
 // Cargar preguntas al inicio
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('Página cargada, inicializando...');
+    console.log('🚀 Página cargada, inicializando...');
     
     try {
-        // Pre-cargar preguntas
-        await cargarPreguntasDesdeJSON();
-        console.log('Preguntas pre-cargadas');
-        
-        // Mostrar estadísticas en consola si hay historial
-        if (STORAGE_AVAILABLE) {
-            const stats = persistencia.obtenerEstadisticas();
-            if (stats.totalIntentos > 0) {
-                console.log(`📊 Estadísticas: ${stats.totalIntentos} intentos | Mejor: ${stats.mejorPuntaje} | Promedio: ${stats.promedio}`);
+        // Probar conexión con Supabase
+        if (typeof supabaseQuiz !== 'undefined') {
+            console.log('🔍 Probando conexión con Supabase...');
+            const conexionOK = await supabaseQuiz.probarConexion();
+            
+            if (conexionOK) {
+                console.log('✅ Conexión con Supabase establecida');
+                
+                // Cargar preguntas desde Supabase
+                await cargarPreguntasDesdeSupabase();
+                
+                // Obtener estadísticas de Supabase
+                try {
+                    const stats = await supabaseQuiz.obtenerEstadisticas();
+                    if (stats.totalIntentos > 0) {
+                        console.log(`📊 Estadísticas globales: ${stats.totalIntentos} intentos | Mejor: ${stats.mejorPuntaje} | Promedio: ${stats.promedio}`);
+                    }
+                } catch (error) {
+                    console.warn('⚠️ No se pudieron obtener estadísticas:', error);
+                }
+            } else {
+                console.warn('⚠️ No hay conexión con Supabase, usando modo local');
+                await cargarPreguntasDesdeJSON();
+                
+                if (STORAGE_AVAILABLE) {
+                    const stats = persistencia.obtenerEstadisticas();
+                    if (stats.totalIntentos > 0) {
+                        console.log(`📊 Estadísticas locales: ${stats.totalIntentos} intentos`);
+                    }
+                }
             }
+        } else {
+            console.warn('⚠️ Supabase no disponible, usando modo local');
+            await cargarPreguntasDesdeJSON();
         }
     } catch (error) {
-        console.error('Error en inicialización:', error);
+        console.error('❌ Error en inicialización:', error);
+        // Último fallback
+        try {
+            await cargarPreguntasDesdeJSON();
+        } catch (e) {
+            console.error('❌ Error crítico cargando preguntas:', e);
+        }
     }
 });
 
@@ -802,10 +901,17 @@ if (btnEmpezar) {
             btnEmpezar.disabled = true;
             btnEmpezar.style.opacity = '0.5';
             
-            // Cargar preguntas desde JSON si no están cargadas
+            // Cargar preguntas si no están cargadas
             if (bancoPreguntas.length === 0) {
                 console.log('Cargando preguntas...');
-                await cargarPreguntasDesdeJSON();
+                if (usandoSupabase || typeof supabaseQuiz !== 'undefined') {
+                    const cargado = await cargarPreguntasDesdeSupabase();
+                    if (!cargado) {
+                        await cargarPreguntasDesdeJSON();
+                    }
+                } else {
+                    await cargarPreguntasDesdeJSON();
+                }
             }
             
             // Validar que hay preguntas disponibles
@@ -815,6 +921,9 @@ if (btnEmpezar) {
                 btnEmpezar.style.opacity = '1';
                 return;
             }
+            
+            // Resetear ID de intento
+            intentoActualId = null;
             
             // Seleccionar preguntas y cargar la primera
             seleccionarPreguntasAleatorias();
