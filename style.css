@@ -1519,38 +1519,44 @@ h1 {
 @supports (-webkit-touch-callout: none) {
     /* Formulario de login en iOS - empieza arriba */
     #login {
-        align-items: flex-start;
-        padding-top: max(20px, env(safe-area-inset-top));
-        overflow-y: auto;
+        align-items: flex-start !important;
+        padding-top: max(20px, env(safe-area-inset-top)) !important;
+        padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+        overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
     }
     
     #login .login-container {
-        margin-top: 0;
+        margin-top: 0 !important;
+        margin-bottom: 20px;
     }
     
     /* Formulario de registro en iOS - empieza arriba */
     #registro {
-        align-items: flex-start;
-        padding-top: max(20px, env(safe-area-inset-top));
-        overflow-y: auto;
+        align-items: flex-start !important;
+        padding-top: max(20px, env(safe-area-inset-top)) !important;
+        padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+        overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
     }
     
     #registro .registro-container {
-        margin-top: 0;
+        margin-top: 0 !important;
+        margin-bottom: 20px;
     }
     
     /* Formulario de crear preguntas en iOS - empieza arriba */
     #crear-preguntas {
-        align-items: flex-start;
-        padding-top: max(20px, env(safe-area-inset-top));
-        overflow-y: auto;
+        align-items: flex-start !important;
+        padding-top: max(20px, env(safe-area-inset-top)) !important;
+        padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+        overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
     }
     
     #crear-preguntas .crear-container {
-        margin-top: 0;
+        margin-top: 0 !important;
+        margin-bottom: 20px;
     }
 }
 
