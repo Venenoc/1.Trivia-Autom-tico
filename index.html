@@ -475,11 +475,17 @@
                 
                 // Si es la sección registro, inicializar formulario de registro
                 if (seccionId === 'registro') {
+                    window.scrollTo(0, 0);
+                    document.documentElement.scrollTop = 0;
+                    document.body.scrollTop = 0;
                     inicializarRegistro();
                 }
                 
                 // Si es la sección login, inicializar formulario de login
                 if (seccionId === 'login') {
+                    window.scrollTo(0, 0);
+                    document.documentElement.scrollTop = 0;
+                    document.body.scrollTop = 0;
                     inicializarLogin();
                 }
                 

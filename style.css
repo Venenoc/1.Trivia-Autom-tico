@@ -1515,6 +1515,45 @@ h1 {
     }
 }
 
+/* iOS - Secciones Login, Registro y Crear Preguntas */
+@supports (-webkit-touch-callout: none) {
+    /* Formulario de login en iOS - empieza arriba */
+    #login {
+        align-items: flex-start;
+        padding-top: max(20px, env(safe-area-inset-top));
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    #login .login-container {
+        margin-top: 0;
+    }
+    
+    /* Formulario de registro en iOS - empieza arriba */
+    #registro {
+        align-items: flex-start;
+        padding-top: max(20px, env(safe-area-inset-top));
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    #registro .registro-container {
+        margin-top: 0;
+    }
+    
+    /* Formulario de crear preguntas en iOS - empieza arriba */
+    #crear-preguntas {
+        align-items: flex-start;
+        padding-top: max(20px, env(safe-area-inset-top));
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    #crear-preguntas .crear-container {
+        margin-top: 0;
+    }
+}
+
 /* ================================================
    ESTILOS ADICIONALES PARA SECCIONES DE LA APP
    ================================================ */
@@ -1827,7 +1866,7 @@ h1 {
     min-height: 100dvh;
     padding: 30px 20px;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     overflow-y: auto;
 }
