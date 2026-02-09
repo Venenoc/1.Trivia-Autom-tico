@@ -3,11 +3,15 @@
 // ================================================
 
 // IMPORTANTE: Reemplaza estos valores con los de tu proyecto Supabase
-const SUPABASE_URL = 'https://ooihwrvpfgafswnesgqu.supabase.co'; // Ejemplo: https://xxxxx.supabase.co
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vaWh3cnZwZmdhZnN3bmVzZ3F1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1NTQxMjEsImV4cCI6MjA4NjEzMDEyMX0.vXsFftQsw6xgd5F5VC2J9GbUawRqRg-I0DuQ3kPwwqI';
+const SUPABASE_URL = 'https://jxehwjcvttmdiignotok.supabase.co'; // Ejemplo: https://xxxxx.supabase.co
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp4ZWh3amN2dHRtZGlpZ25vdG9rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1OTM5MjAsImV4cCI6MjA4NjE2OTkyMH0.vyts5ih-qd4p_zKyKsn0GvCDgWJgbReNZ4MwlKrB1cg';
+
+console.log('🔧 supabase-config.js cargando...');
+console.log('🔧 window.supabase disponible?', typeof window.supabase);
 
 // Inicializar cliente de Supabase
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+console.log('🔧 Cliente creado:', supabaseClient);
 
 // ================================================
 // CLASE PARA MANEJO DE BASE DE DATOS SUPABASE
@@ -259,7 +263,7 @@ class SupabaseQuiz {
      */
     async probarConexion() {
         try {
-            const { data, error } = await this.client
+            const { data, error} = await this.client
                 .from('preguntas')
                 .select('count')
                 .limit(1);
@@ -272,7 +276,212 @@ class SupabaseQuiz {
             return false;
         }
     }
+    
+    // ==========================================
+    // MÉTODOS PARA USUARIOS (FASE 1)
+    // ==========================================
+    
+    /**
+     * Generar código único para quiz
+     * @returns {Promise<string>} Código único generado
+     */
+    async generarCodigoUnico() {
+        try {
+            const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let codigo = '';
+            let existe = true;
+            
+            while (existe) {
+                codigo = '';
+                for (let i = 0; i < 8; i++) {
+                    codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+                }
+                
+                // Verificar si ya existe
+                const { data, error } = await this.client
+                    .from('usuarios')
+                    .select('id')
+                    .eq('quiz_code', codigo)
+                    .single();
+                
+                existe = !error && data !== null;
+            }
+            
+            return codigo;
+        } catch (error) {
+            console.error('Error generando código:', error);
+            return null;
+        }
+    }
+    
+    /**
+     * Crear nuevo usuario
+     * @param {Object} datos - Datos del usuario
+     * @returns {Promise<Object>} Usuario creado
+     */
+    async crearUsuario(datos) {
+        try {
+            const { data, error } = await this.client
+                .from('usuarios')
+                .insert({
+                    nombre: datos.nombre,
+                    email: datos.email,
+                    quiz_code: datos.quizCode,
+                    metodo_pago: datos.metodoPago,
+                    numero_operacion: datos.numeroOperacion,
+                    comprobante_url: datos.comprobanteUrl,
+                    estado_pago: 'pendiente',
+                    activo: false
+                })
+                .select()
+                .single();
+            
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            console.error('Error creando usuario:', error);
+            return null;
+        }
+    }
+    
+    /**
+     * Obtener usuario por código de quiz
+     * @param {string} quizCode - Código del quiz
+     * @returns {Promise<Object>} Usuario o null
+     */
+    async obtenerUsuarioPorCodigo(quizCode) {
+        try {
+            const { data, error } = await this.client
+                .from('usuarios')
+                .select('*')
+                .eq('quiz_code', quizCode)
+                .eq('activo', true)
+                .single();
+            
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            console.error('Error obteniendo usuario:', error);
+            return null;
+        }
+    }
+    
+    /**
+     * Obtener preguntas personalizadas de un usuario
+     * @param {string} usuarioId - UUID del usuario
+     * @returns {Promise<Array>} Array de preguntas
+     */
+    async obtenerPreguntasPersonalizadas(usuarioId) {
+        try {
+            const { data, error } = await this.client
+                .from('preguntas_personalizadas')
+                .select('*')
+                .eq('usuario_id', usuarioId)
+                .order('orden');
+            
+            if (error) throw error;
+            
+            return data.map(p => ({
+                id: p.id,
+                pregunta: p.pregunta,
+                opciones: {
+                    A: p.opcion_a,
+                    B: p.opcion_b,
+                    C: p.opcion_c
+                },
+                correcta: p.correcta
+            }));
+        } catch (error) {
+            console.error('Error obteniendo preguntas personalizadas:', error);
+            return [];
+        }
+    }
+    
+    /**
+     * Guardar preguntas personalizadas de un usuario
+     * @param {string} usuarioId - UUID del usuario
+     * @param {Array} preguntas - Array de 10 preguntas
+     * @returns {Promise<boolean>} True si se guardaron correctamente
+     */
+    async guardarPreguntasPersonalizadas(usuarioId, preguntas) {
+        try {
+            const preguntasFormato = preguntas.map((p, index) => ({
+                usuario_id: usuarioId,
+                orden: index + 1,
+                pregunta: p.pregunta,
+                opcion_a: p.opciones.A,
+                opcion_b: p.opciones.B,
+                opcion_c: p.opciones.C,
+                correcta: p.correcta
+            }));
+            
+            const { data, error } = await this.client
+                .from('preguntas_personalizadas')
+                .insert(preguntasFormato)
+                .select();
+            
+            if (error) throw error;
+            return true;
+        } catch (error) {
+            console.error('Error guardando preguntas personalizadas:', error);
+            return false;
+        }
+    }
+    
+    /**
+     * Guardar intento personalizado
+     * @param {string} usuarioId - UUID del dueño del quiz
+     * @param {number} puntaje - Puntaje obtenido
+     * @param {string} nombreParticipante - Nombre de quien responde
+     * @param {number} tiempoTotal - Tiempo en segundos
+     * @returns {Promise<Object>} Intento guardado
+     */
+    async guardarIntentoPersonalizado(usuarioId, puntaje, nombreParticipante = null, tiempoTotal = null) {
+        try {
+            const { data, error } = await this.client
+                .from('intentos_personalizados')
+                .insert({
+                    usuario_id: usuarioId,
+                    puntaje: puntaje,
+                    nombre_participante: nombreParticipante,
+                    tiempo_total: tiempoTotal
+                })
+                .select()
+                .single();
+            
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            console.error('Error guardando intento personalizado:', error);
+            return null;
+        }
+    }
+    
+    /**
+     * Obtener quiz completo por código
+     * @param {string} quizCode - Código único del quiz
+     * @returns {Promise<Object>} Objeto con usuario y preguntas
+     */
+    async obtenerQuizPorCodigo(quizCode) {
+        try {
+            const usuario = await this.obtenerUsuarioPorCodigo(quizCode);
+            if (!usuario) {
+                return null;
+            }
+            
+            const preguntas = await this.obtenerPreguntasPersonalizadas(usuario.id);
+            
+            return {
+                usuario: usuario,
+                preguntas: preguntas
+            };
+        } catch (error) {
+            console.error('Error obteniendo quiz completo:', error);
+            return null;
+        }
+    }
 }
 
 // Exportar instancia global
-const supabaseQuiz = new SupabaseQuiz();
+window.supabaseQuiz = new SupabaseQuiz();
+console.log('🔧 supabaseQuiz exportado:', window.supabaseQuiz);

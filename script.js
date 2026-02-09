@@ -146,11 +146,58 @@ if (SPEECH_AVAILABLE) {
 }
 
 // ================================================
-// BANCO DE PREGUNTAS (Cargado desde JSON)
+// BANCO DE PREGUNTAS (Cargado desde JSON o Supabase)
 // ================================================
 
 let bancoPreguntas = [];
 let cargaEnProgreso = false;
+let quizPersonalizado = null; // Info del quiz personalizado si existe
+
+// ================================================
+// DETECCIÓN DE QUIZ PERSONALIZADO EN LA URL
+// ================================================
+
+/**
+ * Extraer código de quiz de la URL
+ * Soporta: #quiz/codigo o ?q=codigo
+ * @returns {string|null} Código del quiz o null
+ */
+function obtenerCodigoQuizDesdeURL() {
+    // Desde hash: #quiz/codigo
+    const hash = window.location.hash;
+    if (hash) {
+        const match = hash.match(/^#\/?quiz\/([a-zA-Z0-9]+)$/);
+        if (match) {
+            return match[1];
+        }
+    }
+    
+    // Desde query: ?q=codigo
+    const urlParams = new URLSearchParams(window.location.search);
+    const codigoQuery = urlParams.get('q');
+    if (codigoQuery) {
+        return codigoQuery;
+    }
+    
+    return null;
+}
+
+/**
+ * Mostrar mensaje personalizado en pantalla de bienvenida
+ * @param {string} nombreCreador - Nombre de quien creó el quiz
+ */
+function mostrarMensajeQuizPersonalizado(nombreCreador) {
+    const dedicatoriaElement = document.querySelector('.dedicatoria');
+    if (dedicatoriaElement) {
+        dedicatoriaElement.textContent = `Quiz creado por ${nombreCreador}`;
+        dedicatoriaElement.style.fontSize = '1.2rem';
+        dedicatoriaElement.style.fontWeight = '500';
+    }
+}
+
+// ================================================
+// BANCO DE PREGUNTAS
+// ================================================
 
 // Función para validar pregunta
 function validarPregunta(pregunta) {
@@ -172,9 +219,38 @@ async function cargarPreguntasDesdeSupabase() {
     cargaEnProgreso = true;
     
     try {
+        // PASO 1: Verificar si hay código de quiz personalizado en URL
+        const codigoQuiz = obtenerCodigoQuizDesdeURL();
+        
+        if (codigoQuiz) {
+            console.log(`🔍 Código de quiz detectado en URL: ${codigoQuiz}`);
+            
+            // Intentar cargar quiz personalizado
+            const quizData = await supabaseQuiz.obtenerQuizPorCodigo(codigoQuiz);
+            
+            if (quizData && quizData.preguntas && quizData.preguntas.length >= 10) {
+                // Quiz personalizado encontrado y válido
+                bancoPreguntas = quizData.preguntas;
+                quizPersonalizado = quizData;
+                usandoSupabase = true;
+                
+                console.log(`✅ Quiz personalizado cargado: ${quizData.usuario.nombre}`);
+                console.log(`📝 ${bancoPreguntas.length} preguntas personalizadas`);
+                
+                // Mostrar mensaje personalizado
+                mostrarMensajeQuizPersonalizado(quizData.usuario.nombre);
+                
+                cargaEnProgreso = false;
+                return true;
+            } else {
+                console.warn(`⚠️ No se encontró quiz con código: ${codigoQuiz}`);
+                // Continuar con carga normal
+            }
+        }
+        
+        // PASO 2: Cargar preguntas normales de la tabla 'preguntas'
         console.log('🔄 Cargando preguntas desde Supabase...');
         
-        // Obtener preguntas desde Supabase
         const preguntasSupabase = await supabaseQuiz.obtenerPreguntas();
         
         if (!preguntasSupabase || preguntasSupabase.length === 0) {
@@ -189,8 +265,11 @@ async function cargarPreguntasDesdeSupabase() {
         }
         
         bancoPreguntas = preguntasValidas;
+        quizPersonalizado = null;
         usandoSupabase = true;
         console.log(`✅ ${bancoPreguntas.length} preguntas cargadas desde Supabase`);
+        cargaEnProgreso = false;
+        return true;
         cargaEnProgreso = false;
         return true;
         
@@ -743,10 +822,27 @@ async function mostrarResultados() {
     
     if (usandoSupabase) {
         try {
-            const intentoGuardado = await supabaseQuiz.guardarIntento(puntaje);
+            let intentoGuardado;
+            
+            // Verificar si es un quiz personalizado
+            if (quizPersonalizado && quizPersonalizado.usuario) {
+                // Guardar en tabla de intentos personalizados
+                intentoGuardado = await supabaseQuiz.guardarIntentoPersonalizado(
+                    quizPersonalizado.usuario.id,
+                    puntaje,
+                    null, // nombre_participante (opcional)
+                    null  // tiempo_total (opcional)
+                );
+                console.log(`✅ Intento personalizado guardado para usuario: ${quizPersonalizado.usuario.nombre}`);
+            } else {
+                // Guardar en tabla de intentos normales
+                intentoGuardado = await supabaseQuiz.guardarIntento(puntaje);
+                console.log('✅ Intento normal guardado en Supabase');
+            }
+            
             if (intentoGuardado) {
                 intentoActualId = intentoGuardado.id;
-                console.log('✅ Intento guardado en Supabase con ID:', intentoActualId);
+                console.log('📝 Intento ID:', intentoActualId);
             }
             
             // Obtener estadísticas de Supabase

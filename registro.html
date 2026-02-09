@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta - Quiz San Valentín</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .back-btn:hover {
+            transform: translateX(-3px);
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 25%;
+            right: 25%;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+        
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .step.active .step-circle {
+            background: #667eea;
+        }
+        
+        .step.complete .step-circle {
+            background: #4caf50;
+        }
+        
+        .step-label {
+            font-size: 0.85rem;
+            color: #999;
+        }
+        
+        .step.active .step-label {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .file-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .file-upload input[type="file"] {
+            display: none;
+        }
+        
+        .file-upload-label {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .file-name {
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .payment-info {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-info h3 {
+            color: #856404;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        
+        .payment-info p {
+            color: #856404;
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+        
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #666;
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background: #d0d0d0;
+            box-shadow: none;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            border-radius: 8px;
+            color: #155724;
+            text-align: center;
+        }
+        
+        .success-message h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 8px;
+            color: #721c24;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <a href="landing.html" class="back-btn">← Volver</a>
+        
+        <div class="header">
+            <h1>Crear Mi Quiz 💝</h1>
+            <p class="subtitle">Completa los 3 pasos para crear tu quiz personalizado</p>
+        </div>
+        
+        <div class="step-indicator">
+            <div class="step active" id="step1-indicator">
+                <div class="step-circle">1</div>
+                <div class="step-label">Datos</div>
+            </div>
+            <div class="step" id="step2-indicator">
+                <div class="step-circle">2</div>
+                <div class="step-label">Pago</div>
+            </div>
+            <div class="step" id="step3-indicator">
+                <div class="step-circle">3</div>
+                <div class="step-label">Confirmación</div>
+            </div>
+        </div>
+        
+        <div class="error-message" id="errorMessage"></div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Procesando...</p>
+        </div>
+        
+        <!-- PASO 1: Datos Personales -->
+        <div class="form-section active" id="paso1">
+            <form id="form-datos">
+               <div class="form-group">
+                    <label for="nombre">Tu Nombre *</label>
+                    <input type="text" id="nombre" required placeholder="Ej: Carlos">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Tu Email *</label>
+                    <input type="email" id="email" required placeholder="tu@email.com">
+                </div>
+                
+                <button type="submit" class="btn">Continuar al Pago →</button>
+            </form>
+        </div>
+        
+        <!-- PASO 2: Información de Pago -->
+        <div class="form-section" id="paso2">
+            <div class="payment-info">
+                <h3>💳 Información de Pago</h3>
+                <p><strong>Precio:</strong> S/ 10.00 (Promo San Valentín)</p>
+                <p><strong>Yape:</strong> 987654321</p>
+                <p><strong>BCP:</strong> 19X-XXXXXXX-X-XX</p>
+                <p style="margin-top: 10px;">Realiza la transferencia y sube tu comprobante</p>
+            </div>
+            
+            <form id="form-pago">
+                <div class="form-group">
+                    <label for="metodo-pago">Método de Pago *</label>
+                    <select id="metodo-pago" required>
+                        <option value="">Selecciona...</option>
+                        <option value="yape">Yape</option>
+                        <option value="transferencia">Transferencia Bancaria</option>
+                        <option value="plin">Plin</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="numero-operacion">Número de Operación *</label>
+                    <input type="text" id="numero-operacion" required placeholder="Ej: 0012345678">
+                </div>
+                
+                <div class="form-group">
+                    <label>Comprobante de Pago *</label>
+                    <div class="file-upload" onclick="document.getElementById('comprobante').click()">
+                        <input type="file" id="comprobante" accept="image/*" required>
+                        <div class="file-upload-label">📸 Click para subir captura</div>
+                        <div class="file-name" id="fileName">JPG, PNG - Máx 5MB</div>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-secondary" onclick="volverPaso1()">← Atrás</button>
+                <button type="submit" class="btn">Confirmar y Continuar →</button>
+            </form>
+        </div>
+        
+        <!-- PASO 3: Confirmación -->
+        <div class="form-section" id="paso3">
+            <div class="success-message">
+                <h2>¡Registro Exitoso! 🎉</h2>
+                <p style="margin: 15px 0;">Tu cuenta ha sido creada correctamente.</p>
+                <p><strong>Código de Quiz:</strong> <span id="quizCode" style="font-family: monospace; font-size: 1.2rem; color: #667eea;"></span></p>
+                <p style="margin-top: 20px; font-size: 0.9rem;">
+                    Tu pago está en <strong>revisión</strong>. Te notificaremos por email cuando sea aprobado.
+                    Una vez aprobado, podrás crear tus 10 preguntas personalizadas.
+                </p>
+            </div>
+            
+            <button class="btn" onclick="window.location.href='landing.html'">Volver al Inicio</button>
+        </div>
+    </div>
+    
+    <script src="supabase-config.js"></script>
+    <script>
+        let datosUsuario = {};
+        let archivoComprobante = null;
+        
+        // PASO 1: Formulario de datos
+        document.getElementById('form-datos').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            datosUsuario.nombre = document.getElementById('nombre').value.trim();
+            datosUsuario.email = document.getElementById('email').value.trim();
+            
+            if (!datosUsuario.nombre || !datosUsuario.email) {
+                mostrarError('Por favor completa todos los campos');
+                return;
+            }
+            
+            cambiarPaso(2);
+        });
+        
+        // PASO 2: Formulario de pago
+        document.getElementById('comprobante').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    mostrarError('El archivo es muy grande. Máximo 5MB');
+                    e.target.value = '';
+                    return;
+                }
+                archivoComprobante = file;
+                document.getElementById('fileName').textContent = file.name;
+            }
+        });
+        
+        document.getElementById('form-pago').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const metodoPago = document.getElementById('metodo-pago').value;
+            const numeroOperacion = document.getElementById('numero-operacion').value.trim();
+            
+            if (!metodoPago || !numeroOperacion || !archivoComprobante) {
+                mostrarError('Por favor completa todos los campos y sube el comprobante');
+                return;
+            }
+            
+            datosUsuario.metodoPago = metodoPago;
+            datosUsuario.numeroOperacion = numeroOperacion;
+            
+            // Registrar usuario
+            await registrarUsuario();
+        });
+        
+        async function registrarUsuario() {
+            mostrarLoading(true);
+            ocultarError();
+            
+            try {
+                // Generar código único
+                const quizCode = await supabaseQuiz.generarCodigoUnico();
+                
+                if (!quizCode) {
+                    throw new Error('No se pudo generar el código del quiz');
+                }
+                
+                // Subir comprobante a Supabase Storage
+                let comprobanteUrl = null;
+                try {
+                    const fileName = `${quizCode}_${Date.now()}.${archivoComprobante.name.split('.').pop()}`;
+                    const { data, error } = await supabaseQuiz.client.storage
+                        .from('comprobantes')
+                        .upload(fileName, archivoComprobante);
+                    
+                    if (error) throw error;
+                    
+                    // Obtener URL pública
+                    const { data: urlData } = supabaseQuiz.client.storage
+                        .from('comprobantes')
+                        .getPublicUrl(fileName);
+                    
+                    comprobanteUrl = urlData.publicUrl;
+                } catch (storageError) {
+                    console.warn('Error subiendo comprobante a storage:', storageError);
+                    comprobanteUrl = 'pendiente_subida';
+                }
+                
+                // Crear usuario en base de datos
+                const usuario = await supabaseQuiz.crearUsuario({
+                    nombre: datosUsuario.nombre,
+                    email: datosUsuario.email,
+                    quizCode: quizCode,
+                    metodoPago: datosUsuario.metodoPago,
+                    numeroOperacion: datosUsuario.numeroOperacion,
+                    comprobanteUrl: comprobanteUrl
+                });
+                
+                if (!usuario) {
+                    throw new Error('No se pudo crear el usuario');
+                }
+                
+                console.log('✅ Usuario registrado:', usuario);
+                
+                // Mostrar código en paso 3
+                document.getElementById('quizCode').textContent = quizCode;
+                
+                mostrarLoading(false);
+                cambiarPaso(3);
+                
+            } catch (error) {
+                console.error('❌ Error registrando usuario:', error);
+                mostrarError('Hubo un error al procesar tu registro: ' + error.message);
+                mostrarLoading(false);
+            }
+        }
+        
+        function cambiarPaso(paso) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar sección actual
+            document.getElementById('paso' + paso).classList.add('active');
+            
+            // Actualizar indicadores
+            for (let i = 1; i <= 3; i++) {
+                const indicator = document.getElementById('step' + i + '-indicator');
+                indicator.classList.remove('active', 'complete');
+                
+                if (i < paso) {
+                    indicator.classList.add('complete');
+                } else if (i === paso) {
+                    indicator.classList.add('active');
+                }
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function volverPaso1() {
+            cambiarPaso(1);
+        }
+        
+        function mostrarError(mensaje) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = mensaje;
+            errorDiv.classList.add('show');
+            
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 5000);
+        }
+        
+        function ocultarError() {
+            document.getElementById('errorMessage').classList.remove('show');
+        }
+        
+        function mostrarLoading(show) {
+            const loading = document.getElementById('loading');
+            if (show) {
+                loading.classList.add('show');
+            } else {
+                loading.classList.remove('show');
+            }
+        }
+    </script>
+    
+</body>
+</html>
