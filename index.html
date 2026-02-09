@@ -9,1157 +9,6 @@
     <title>Quiz San Valentín - Crea tu Quiz Personalizado</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* ================================================
-           ESTILOS GLOBALES
-           ================================================ */
-        
-        /* Reset body para secciones en pantalla completa */
-        body {
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-        
-        /* Estilos para las secciones */
-        .section {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 1;
-        }
-        
-        .section.active {
-            display: block;
-            z-index: 10;
-        }
-        
-        /* ================================================
-           SECCIÓN HOME / LANDING
-           ================================================ */
-        
-        /* Landing styles - formato 9:16 */
-        #landing {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-        }
-        
-        #landing .landing-container {
-            width: min(420px, 100%);
-            max-height: 90vh;
-            max-height: 90dvh;
-            aspect-ratio: 9 / 16;
-            background: white;
-            border-radius: 15px;
-            overflow-y: auto;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px 30px;
-            text-align: center;
-        }
-        
-        #landing .logo {
-            font-size: 4rem;
-            margin-top: -40px;
-            margin-bottom: 10px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        #landing h1 {
-            color: #667eea;
-            font-size: 2rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        
-        #landing .subtitle {
-            color: #666;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        
-        #landing .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        #landing .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            padding: 15px 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        #landing .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-        }
-        
-        #landing .btn:active {
-            transform: translateY(-1px);
-        }
-        
-        #landing .features {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-        
-        #landing .features h3 {
-            color: #333;
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-        
-        #landing .feature-list {
-            text-align: left;
-            list-style: none;
-        }
-        
-        #landing .feature-list li {
-            color: #666;
-            font-size: 0.9rem;
-            padding: 6px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        #landing .feature-list li::before {
-            content: "✓";
-            color: #667eea;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        
-        #landing .footer {
-            margin-top: 15px;
-            color: #999;
-            font-size: 0.8rem;
-        }
-        
-        .btn-secundario {
-            background: #f0f0f0;
-            color: #666;
-            border: none;
-            border-radius: 15px;
-            padding: 15px 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-secundario:hover {
-            background: #e0e0e0;
-            transform: translateY(-2px);
-        }
-        
-        /* ================================================
-           SECCIÓN CREAR PREGUNTAS
-           ================================================ */
-        
-        #crear-preguntas {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 30px 20px;
-        }
-        
-        #crear-preguntas .crear-container {
-            max-width: 700px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-        }
-        
-        #crear-preguntas .header-crear {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        #crear-preguntas .header-crear h1 {
-            color: #667eea;
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        #crear-preguntas .header-crear .subtitle {
-            color: #666;
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-        
-        #crear-preguntas .progress {
-            background: #e0e0e0;
-            height: 8px;
-            border-radius: 10px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-        
-        #crear-preguntas .progress-bar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100%;
-            transition: width 0.3s;
-        }
-        
-        #crear-preguntas .progress-text {
-            text-align: center;
-            color: #667eea;
-            font-weight: 600;
-            margin-top: 5px;
-            font-size: 0.9rem;
-        }
-        
-        #crear-preguntas .pregunta-card {
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            animation: slideIn 0.3s;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        #crear-preguntas .pregunta-numero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        
-        #crear-preguntas .form-group {
-            margin-bottom: 18px;
-        }
-        
-        #crear-preguntas .form-group label {
-            display: block;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-        
-        #crear-preguntas input[type="text"],
-        #crear-preguntas textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-        
-        #crear-preguntas textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        
-        #crear-preguntas input:focus,
-        #crear-preguntas textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        #crear-preguntas .opciones-grid {
-            display: grid;
-            gap: 12px;
-        }
-        
-        #crear-preguntas .opcion-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        #crear-preguntas .opcion-label {
-            background: #667eea;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-        
-        #crear-preguntas .opcion-input {
-            flex: 1;
-        }
-        
-        #crear-preguntas .correcta-select {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        #crear-preguntas .radio-option {
-            flex: 1;
-            position: relative;
-        }
-        
-        #crear-preguntas .radio-option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-        }
-        
-        #crear-preguntas .radio-option label {
-            display: block;
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        #crear-preguntas .radio-option input[type="radio"]:checked + label {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        #crear-preguntas .success-screen {
-            display: none;
-            text-align: center;
-            padding: 40px 20px;
-        }
-        
-        #crear-preguntas .success-screen.show {
-            display: block;
-        }
-        
-        #crear-preguntas .success-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            animation: bounce 0.6s;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        #crear-preguntas .link-box {
-            background: #f8f9fa;
-            border: 2px solid #667eea;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 25px 0;
-        }
-        
-        #crear-preguntas .link-box h3 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-        
-        #crear-preguntas .link-display {
-            background: white;
-            border: 2px dashed #667eea;
-            border-radius: 10px;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95rem;
-            word-break: break-all;
-            margin: 15px 0;
-            color: #667eea;
-        }
-        
-        #crear-preguntas .btn-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        #crear-preguntas .btn-group .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 14px 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        #crear-preguntas .btn-group .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            transform: translate(-50%, -50%);
-            transition: width 0.5s, height 0.5s;
-        }
-        
-        #crear-preguntas .btn-group .btn:hover::before {
-            width: 250px;
-            height: 250px;
-        }
-        
-        #crear-preguntas .btn-group .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
-        }
-        
-        #crear-preguntas .btn-group .btn:active {
-            transform: translateY(0);
-        }
-        
-        #crear-preguntas .btn-group .btn-secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.3);
-        }
-        
-        #crear-preguntas .btn-group .btn-secondary:hover {
-            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.5);
-        }
-        
-        #crear-preguntas .success-screen .btn {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        #crear-preguntas .success-screen .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        
-        #crear-preguntas .success-screen .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        #crear-preguntas .success-screen .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
-        }
-        
-        #crear-preguntas .success-screen .btn:active {
-            transform: translateY(-1px);
-        }
-        
-        #crear-preguntas #btnGuardar {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            padding: 18px 30px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 30px;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        #crear-preguntas #btnGuardar::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        
-        #crear-preguntas #btnGuardar:hover:not(:disabled)::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        #crear-preguntas #btnGuardar:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
-        }
-        
-        #crear-preguntas #btnGuardar:active:not(:disabled) {
-            transform: translateY(-1px);
-        }
-        
-        #crear-preguntas #btnGuardar:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        
-        @keyframes pulse-btn {
-            0%, 100% {
-                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            }
-            50% {
-                box-shadow: 0 10px 40px rgba(102, 126, 234, 0.6);
-            }
-        }
-        
-        #crear-preguntas #btnGuardar:not(:disabled) {
-            animation: pulse-btn 2s ease-in-out infinite;
-        }
-        
-        #crear-preguntas .error-message {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-            padding: 15px;
-            border-radius: 8px;
-            color: #721c24;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        #crear-preguntas .error-message.show {
-            display: block;
-        }
-        
-        #crear-preguntas .loading {
-            text-align: center;
-            padding: 30px;
-            display: none;
-        }
-        
-        #crear-preguntas .loading.show {
-            display: block;
-        }
-        
-        #crear-preguntas .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* ================================================
-           SECCIÓN REGISTRO
-           ================================================ */
-        
-        #registro {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 30px 20px;
-        }
-        
-        #registro .registro-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-        }
-        
-        #registro .header-registro {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-        
-        #registro .back-btn-registro {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            color: #667eea;
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-        
-        #registro .back-btn-registro:hover {
-            transform: translateX(-3px);
-        }
-        
-        #registro .header-registro h1 {
-            color: #667eea;
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        #registro .header-registro .subtitle {
-            color: #666;
-            font-size: 1rem;
-        }
-        
-        #registro .step-indicator {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            position: relative;
-        }
-        
-        #registro .step-indicator::before {
-            content: '';
-            position: absolute;
-            top: 15px;
-            left: 25%;
-            right: 25%;
-            height: 2px;
-            background: #e0e0e0;
-            z-index: 0;
-        }
-        
-        #registro .step {
-            flex: 1;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-        
-        #registro .step-circle {
-            width: 30px;
-            height: 30px;
-            background: #e0e0e0;
-            border-radius: 50%;
-            margin: 0 auto 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        
-        #registro .step.active .step-circle {
-            background: #667eea;
-        }
-        
-        #registro .step.complete .step-circle {
-            background: #4caf50;
-        }
-        
-        #registro .step-label {
-            font-size: 0.85rem;
-            color: #999;
-        }
-        
-        #registro .step.active .step-label {
-            color: #667eea;
-            font-weight: 600;
-        }
-        
-        #registro .form-section {
-            display: none;
-        }
-        
-        #registro .form-section.active {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-        
-        #registro .form-group {
-            margin-bottom: 20px;
-        }
-        
-        #registro .form-group label {
-            display: block;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-        
-        #registro input[type="text"],
-        #registro input[type="email"],
-        #registro select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        #registro input:focus,
-        #registro select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        #registro .file-upload {
-            border: 2px dashed #e0e0e0;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        #registro .file-upload:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
-        }
-        
-        #registro .file-upload input[type="file"] {
-            display: none;
-        }
-        
-        #registro .file-upload-label {
-            color: #667eea;
-            font-weight: 600;
-        }
-        
-        #registro .file-name {
-            margin-top: 10px;
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        #registro .payment-info {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        #registro .payment-info h3 {
-            color: #856404;
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-        
-        #registro .payment-info p {
-            color: #856404;
-            font-size: 0.9rem;
-            margin: 5px 0;
-        }
-        
-        #registro .btn {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-        
-        #registro .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-        
-        #registro .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        #registro .btn-secondary {
-            background: #e0e0e0;
-            color: #666;
-        }
-        
-        #registro .btn-secondary:hover:not(:disabled) {
-            background: #d0d0d0;
-            box-shadow: none;
-        }
-        
-        #registro .success-message {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
-            padding: 20px;
-            border-radius: 8px;
-            color: #155724;
-            text-align: center;
-        }
-        
-        #registro .success-message h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-        
-        #registro .error-message {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-            padding: 15px;
-            border-radius: 8px;
-            color: #721c24;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        #registro .error-message.show {
-            display: block;
-        }
-        
-        #registro .loading {
-            text-align: center;
-            padding: 20px;
-            display: none;
-        }
-        
-        #registro .loading.show {
-            display: block;
-        }
-        
-        #registro .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spinReg 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        @keyframes spinReg {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* ================================================
-           SECCIÓN LOGIN
-           ================================================ */
-        
-        #login {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px 20px;
-        }
-        
-        #login .login-container {
-            max-width: 500px;
-            width: 100%;
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-        }
-        
-        #login .header-login {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-        
-        #login .back-btn-login {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            color: #667eea;
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-        
-        #login .back-btn-login:hover {
-            transform: translateX(-3px);
-        }
-        
-        #login .header-login h1 {
-            color: #667eea;
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        #login .header-login .subtitle {
-            color: #666;
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-        
-        #login .form-group {
-            margin-bottom: 20px;
-        }
-        
-        #login .form-group label {
-            display: block;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-        
-        #login input[type="text"],
-        #login input[type="email"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        #login input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        #login .btn {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 15px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-        
-        #login .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-        
-        #login .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        #login .error-message {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-            padding: 15px;
-            border-radius: 8px;
-            color: #721c24;
-            margin-bottom: 20px;
-            display: none;
-        }
-        
-        #login .error-message.show {
-            display: block;
-        }
-        
-        #login .info-message {
-            background: #d1ecf1;
-            border-left: 4px solid #0c5460;
-            padding: 15px;
-            border-radius: 8px;
-            color: #0c5460;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-        }
-        
-        #login .loading {
-            text-align: center;
-            padding: 20px;
-            display: none;
-        }
-        
-        #login .loading.show {
-            display: block;
-        }
-        
-        #login .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spinLogin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-        
-        @keyframes spinLogin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        #login .divider {
-            text-align: center;
-            margin: 25px 0;
-            position: relative;
-        }
-        
-        #login .divider::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 100%;
-            height: 1px;
-            background: #e0e0e0;
-        }
-        
-        #login .divider span {
-            background: white;
-            padding: 0 15px;
-            position: relative;
-            color: #999;
-            font-size: 0.9rem;
-        }
-        
-        #login .register-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-            font-size: 0.95rem;
-        }
-        
-        #login .register-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        #login .register-link a:hover {
-            text-decoration: underline;
-        }
-        
-        /* ================================================
-           SECCIÓN QUIZ
-           ================================================ */
-        
-        /* Quiz section - mismo formato 9:16 que HOME */
-        #quiz {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-        }
-        
-        #quiz .container {
-            width: min(420px, 100%);
-            max-height: 90vh;
-            max-height: 90dvh;
-            aspect-ratio: 9 / 16;
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* ================================================
-           RESPONSIVE (HOME)
-           ================================================ */
-        
-        @media (max-width: 600px) {
-            #landing .landing-container {
-                padding: 25px 20px;
-                width: 100%;
-                max-height: 95vh;
-                max-height: 95dvh;
-            }
-            
-            #landing h1 {
-                font-size: 1.7rem;
-            }
-            
-            #landing .subtitle {
-                font-size: 0.9rem;
-            }
-            
-            #landing .btn {
-                padding: 14px 20px;
-                font-size: 0.95rem;
-            }
-            
-            #landing .logo {
-                font-size: 3.5rem;
-            }
-            
-            /* RESPONSIVE QUIZ */
-            #quiz .container {
-                width: 100%;
-                max-height: 95vh;
-                max-height: 95dvh;
-            }
-        }
-    </style>
 </head>
 <body>
     
@@ -1217,18 +66,26 @@
                  - Botón para iniciar el quiz
                  ========================================== -->
             <section id="bienvenida" class="seccion active">
+                <!-- Pantalla de carga para quiz personalizado -->
+                <div id="loading-quiz" class="loading-quiz-overlay">
+                    <div class="loading-quiz-content">
+                        <div class="spinner"></div>
+                        <p>Cargando tu quiz personalizado...</p>
+                    </div>
+                </div>
+                
                 <div class="contenido">
                     <!-- Título y dedicatoria en box blanca con efecto de flotación -->
                     <div class="titulo-box">
                         <h1>💘 Para Ti 💘</h1>
-                        <p class="dedicatoria">Con amor</p>
+                        <p class="dedicatoria">Rhi</p>
                     </div>
                     <!-- Textos descriptivos -->
                     <p class="descripcion">Preparé este quiz especial para ti</p>
                     <p class="descripcion">¿Qué tanto me conoces?</p>
                     <!-- Botón principal para iniciar -->
                     <button id="btn-empezar" class="btn-principal">¡Empezar!</button>
-                    <button onclick="mostrarSeccion('landing')" class="btn-secundario" style="margin-top: 15px;">← Volver al inicio</button>
+                    <button id="btn-volver-bienvenida" onclick="mostrarSeccion('landing')" class="btn-secundario" style="margin-top: 15px;">← Volver al inicio</button>
                 </div>
             </section>
 
@@ -1296,7 +153,7 @@
                         <p class="mensaje-resultado">¡Excelente trabajo!</p>
                         <p class="intento-numero" style="font-size: 14px; opacity: 0.8; margin-top: 15px;"></p>
                         <button id="btn-reiniciar" class="btn-principal">Jugar de nuevo</button>
-                        <button onclick="mostrarSeccion('landing')" class="btn-secundario" style="margin-top: 15px;">← Volver al inicio</button>
+                        <button id="btn-volver-resultados" onclick="mostrarSeccion('landing')" class="btn-secundario" style="margin-top: 15px;">← Volver al inicio</button>
                     </div>
                 </div>
             </section>
@@ -1316,7 +173,7 @@
             
             <div class="header-login">
                 <h1>Iniciar Sesión 🔑</h1>
-                <p class="subtitle">Accede con tu email o código de quiz</p>
+                <p class="subtitle">Accede con tu correo electrónico</p>
             </div>
             
             <div class="error-message" id="errorMessageLogin"></div>
@@ -1327,21 +184,12 @@
             
             <form id="form-login">
                 <div class="form-group">
-                    <label for="email-login">Email *</label>
+                    <label for="email-login">Correo Electrónico *</label>
                     <input type="email" id="email-login" required placeholder="tu@email.com">
                 </div>
                 
-                <div class="divider">
-                    <span>O</span>
-                </div>
-                
-                <div class="form-group">
-                    <label for="codigo-login">Código de Quiz</label>
-                    <input type="text" id="codigo-login" placeholder="Ej: ABC12345" style="text-transform: uppercase;">
-                </div>
-                
                 <div class="info-message">
-                    💡 Puedes ingresar tu email o el código de quiz que recibiste al registrarte.
+                    💡 Usa el email que registraste al crear tu cuenta.
                 </div>
                 
                 <button type="submit" class="btn">Iniciar Sesión →</button>
@@ -1551,6 +399,38 @@
     <script src="supabase-config.js"></script>
     <script>
         /* ================================================
+           FUNCIONES UTILITARIAS GLOBALES
+           ================================================ */
+        
+        // Función genérica para mostrar errores
+        function mostrarError(elementId, mensaje, timeout = 5000) {
+            const errorDiv = document.getElementById(elementId);
+            if (!errorDiv) return;
+            errorDiv.textContent = mensaje;
+            errorDiv.classList.add('show');
+            if (timeout > 0) {
+                setTimeout(() => errorDiv.classList.remove('show'), timeout);
+            }
+        }
+        
+        // Función genérica para ocultar errores
+        function ocultarError(elementId) {
+            const errorDiv = document.getElementById(elementId);
+            if (errorDiv) errorDiv.classList.remove('show');
+        }
+        
+        // Función genérica para mostrar/ocultar loading
+        function toggleLoading(elementId, show) {
+            const loading = document.getElementById(elementId);
+            if (!loading) return;
+            if (show) {
+                loading.classList.add('show');
+            } else {
+                loading.classList.remove('show');
+            }
+        }
+        
+        /* ================================================
            SCRIPTS GLOBALES - Navegación entre secciones
            ================================================ */
         
@@ -1559,6 +439,11 @@
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
+            
+            // Limpiar sessionStorage si se vuelve al landing desde cualquier lugar
+            if (seccionId === 'landing') {
+                sessionStorage.removeItem('currentQuizCode');
+            }
             
             // Mostrar la sección seleccionada
             const seccion = document.getElementById(seccionId);
@@ -1599,6 +484,17 @@
             const hash = window.location.hash.substring(1); // Eliminar el #
             if (hash) {
                 // Extraer sección del hash (ej: "crear-preguntas?code=XXX" -> "crear-preguntas")
+                const seccionId = hash.split('?')[0];
+                if (seccionId && document.getElementById(seccionId)) {
+                    mostrarSeccion(seccionId);
+                }
+            }
+        });
+        
+        // Detectar cambios de hash durante la navegación
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
                 const seccionId = hash.split('?')[0];
                 if (seccionId && document.getElementById(seccionId)) {
                     mostrarSeccion(seccionId);
@@ -1804,6 +700,20 @@
             const urlParams = new URLSearchParams(hash.split('?')[1] || '');
             const quizCode = urlParams.get('code');
             
+            // Mostrar loading y ocultar botones "Volver al inicio" si hay código de quiz personalizado
+            const loadingQuiz = document.getElementById('loading-quiz');
+            const btnVolverBienvenida = document.getElementById('btn-volver-bienvenida');
+            const btnVolverResultados = document.getElementById('btn-volver-resultados');
+            
+            if (quizCode) {
+                if (loadingQuiz) {
+                    loadingQuiz.classList.add('show');
+                }
+                // Ocultar botones de volver al inicio en quiz personalizado
+                if (btnVolverBienvenida) btnVolverBienvenida.style.display = 'none';
+                if (btnVolverResultados) btnVolverResultados.style.display = 'none';
+            }
+            
             if (quizCode) {
                 // Cargar preguntas personalizadas desde Supabase
                 console.log('🔍 Cargando preguntas personalizadas con código:', quizCode);
@@ -1829,13 +739,26 @@
                                 dedicatoriaElement.textContent = usuario.nombre_destinatario;
                             }
                         }
+                        
+                        // Ocultar loading cuando los datos estén listos
+                        if (loadingQuiz) {
+                            loadingQuiz.classList.remove('show');
+                        }
                     } else {
                         console.warn('⚠️ No se encontraron preguntas para el código:', quizCode);
                         preguntasDemo = preguntasDefault;
+                        // Ocultar loading si no hay preguntas
+                        if (loadingQuiz) {
+                            loadingQuiz.classList.remove('show');
+                        }
                     }
                 } catch (error) {
                     console.error('❌ Error cargando preguntas personalizadas:', error);
                     preguntasDemo = preguntasDefault;
+                    // Ocultar loading si hay error
+                    if (loadingQuiz) {
+                        loadingQuiz.classList.remove('show');
+                    }
                 }
             } else {
                 // Intentar cargar preguntas desde preguntas.json (modo demo)
@@ -2004,7 +927,7 @@
                     } else if (opcionElegida === null) {
                         leerTexto(`Se acabó el tiempo. La respuesta es: ${textoRespuestaCorrecta}`);
                     } else {
-                        leerTexto(`Debemos hablar. Es ${textoRespuestaCorrecta}`);
+                        leerTexto(`Incorrecto. Es ${textoRespuestaCorrecta}`);
                     }
                 }, 300);
             }
@@ -2140,22 +1063,33 @@
                 }
                 console.log('✅ supabaseQuiz disponible');
                 
-                // Obtener quiz_code de la URL (?code=xxxxx o hash #crear-preguntas?code=xxxxx)
-                const urlParams = new URLSearchParams(window.location.search);
-                quizCode = urlParams.get('code');
+                // Obtener quiz_code con prioridad: sessionStorage > URL query > hash
+                quizCode = sessionStorage.getItem('currentQuizCode');
+                console.log('📝 Quiz code desde sessionStorage:', quizCode);
+                
+                // Si no está en sessionStorage, buscar en URL
+                if (!quizCode) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    quizCode = urlParams.get('code');
+                    console.log('📝 Quiz code desde URL query:', quizCode);
+                }
                 
                 // Si no está en query, buscar en hash
                 if (!quizCode && window.location.hash.includes('?')) {
                     const hashParams = new URLSearchParams(window.location.hash.split('?')[1]);
                     quizCode = hashParams.get('code');
+                    console.log('📝 Quiz code desde hash:', quizCode);
                 }
                 
-                console.log('📝 Quiz code:', quizCode);
+                console.log('📝 Quiz code final:', quizCode);
                 
                 if (!quizCode) {
                     mostrarErrorAcceso('No se proporcionó un código de quiz válido.');
                     return;
                 }
+                
+                // Guardar en sessionStorage para futuros accesos
+                sessionStorage.setItem('currentQuizCode', quizCode);
                 
                 // Verificar que el usuario existe y está activo
                 try {
@@ -2164,7 +1098,7 @@
                         .from('usuarios')
                         .select('*')
                         .eq('quiz_code', quizCode)
-                        .single();
+                        .maybeSingle();
                     
                     console.log('📊 Respuesta de Supabase - data:', data, 'error:', error);
                     
@@ -2211,6 +1145,8 @@
             document.getElementById('loadingInicial').classList.remove('show');
             document.getElementById('errorAccesoTexto').textContent = mensaje;
             document.getElementById('errorAcceso').classList.add('show');
+            // Limpiar código del sessionStorage si hay error de acceso
+            sessionStorage.removeItem('currentQuizCode');
         }
         
         function crearFormularioPreguntas() {
@@ -2424,7 +1360,7 @@
                     datosUsuarioReg.email = document.getElementById('email-reg').value.trim();
                     
                     if (!datosUsuarioReg.nombre || !datosUsuarioReg.email) {
-                        mostrarErrorReg('Por favor completa todos los campos');
+                        mostrarError('errorMessageReg', 'Por favor completa todos los campos');
                         return;
                     }
                     
@@ -2438,7 +1374,7 @@
                     const file = e.target.files[0];
                     if (file) {
                         if (file.size > 5 * 1024 * 1024) {
-                            mostrarErrorReg('El archivo es muy grande. Máximo 5MB');
+                            mostrarError('errorMessageReg', 'El archivo es muy grande. Máximo 5MB');
                             e.target.value = '';
                             return;
                         }
@@ -2457,7 +1393,7 @@
                     const numeroOperacion = document.getElementById('numero-operacion-reg').value.trim();
                     
                     if (!metodoPago || !numeroOperacion || !archivoComprobanteReg) {
-                        mostrarErrorReg('Por favor completa todos los campos y sube el comprobante');
+                        mostrarError('errorMessageReg', 'Por favor completa todos los campos y sube el comprobante');
                         return;
                     }
                     
@@ -2471,8 +1407,8 @@
         }
         
         async function registrarUsuarioReg() {
-            mostrarLoadingReg(true);
-            ocultarErrorReg();
+            toggleLoading('loadingReg', true);
+            ocultarError('errorMessageReg');
             
             try {
                 // Generar código único
@@ -2519,13 +1455,13 @@
                 
                 console.log('✅ Usuario registrado:', usuario);
                 
-                mostrarLoadingReg(false);
+                toggleLoading('loadingReg', false);
                 cambiarPasoReg(3);
                 
             } catch (error) {
                 console.error('❌ Error registrando usuario:', error);
-                mostrarErrorReg('Hubo un error al procesar tu registro: ' + error.message);
-                mostrarLoadingReg(false);
+                mostrarError('errorMessageReg', 'Hubo un error al procesar tu registro: ' + error.message);
+                toggleLoading('loadingReg', false);
             }
         }
         
@@ -2558,29 +1494,6 @@
             cambiarPasoReg(1);
         }
         
-        function mostrarErrorReg(mensaje) {
-            const errorDiv = document.getElementById('errorMessageReg');
-            errorDiv.textContent = mensaje;
-            errorDiv.classList.add('show');
-            
-            setTimeout(() => {
-                errorDiv.classList.remove('show');
-            }, 5000);
-        }
-        
-        function ocultarErrorReg() {
-            document.getElementById('errorMessageReg').classList.remove('show');
-        }
-        
-        function mostrarLoadingReg(show) {
-            const loading = document.getElementById('loadingReg');
-            if (show) {
-                loading.classList.add('show');
-            } else {
-                loading.classList.remove('show');
-            }
-        }
-        
         function irALoginDesdeRegistro() {
             mostrarSeccion('login');
         }
@@ -2593,15 +1506,12 @@
         function inicializarLogin() {
             console.log('🚀 Inicializando login');
             
-            // Limpiar campos
+            // Limpiar campo
             const emailInput = document.getElementById('email-login');
-            const codigoInput = document.getElementById('codigo-login');
-            
             if (emailInput) emailInput.value = '';
-            if (codigoInput) codigoInput.value = '';
             
-            ocultarErrorLogin();
-            mostrarLoadingLogin(false);
+            ocultarError('errorMessageLogin');
+            toggleLoading('loadingLogin', false);
             
             // Configurar event listener del formulario
             const formLogin = document.getElementById('form-login');
@@ -2615,104 +1525,64 @@
         
         async function procesarLogin() {
             const email = document.getElementById('email-login').value.trim();
-            const codigo = document.getElementById('codigo-login').value.trim().toUpperCase();
             
-            // Validar que al menos uno esté lleno
-            if (!email && !codigo) {
-                mostrarErrorLogin('Por favor ingresa tu email o código de quiz');
+            // Validar que el email esté lleno
+            if (!email) {
+                mostrarError('errorMessageLogin', 'Por favor ingresa tu correo electrónico');
                 return;
             }
             
-            mostrarLoadingLogin(true);
-            ocultarErrorLogin();
+            toggleLoading('loadingLogin', true);
+            ocultarError('errorMessageLogin');
             
             try {
-                let usuario = null;
+                // Buscar usuario por email
+                console.log('🔎 Buscando usuario por email:', email);
+                const { data: usuario, error } = await supabaseQuiz.client
+                    .from('usuarios')
+                    .select('*')
+                    .eq('email', email)
+                    .maybeSingle();
                 
-                // Buscar por código primero si se proporcionó
-                if (codigo) {
-                    console.log('🔎 Buscando por código:', codigo);
-                    const { data, error } = await supabaseQuiz.client
-                        .from('usuarios')
-                        .select('*')
-                        .eq('quiz_code', codigo)
-                        .single();
-                    
-                    if (data) {
-                        usuario = data;
-                        console.log('✅ Usuario encontrado por código');
-                    } else {
-                        console.log('❌ No se encontró usuario con ese código');
-                    }
+                if (error) {
+                    console.error('❌ Error en la consulta:', error);
                 }
                 
-                // Si no se encontró por código, buscar por email
-                if (!usuario && email) {
-                    console.log('🔎 Buscando por email:', email);
-                    const { data, error } = await supabaseQuiz.client
-                        .from('usuarios')
-                        .select('*')
-                        .eq('email', email)
-                        .single();
-                    
-                    if (data) {
-                        usuario = data;
-                        console.log('✅ Usuario encontrado por email');
-                    } else {
-                        console.log('❌ No se encontró usuario con ese email');
-                    }
+                if (usuario) {
+                    console.log('✅ Usuario encontrado por email');
+                } else {
+                    console.log('❌ No se encontró usuario con ese email');
                 }
                 
                 // Validar si se encontró el usuario
                 if (!usuario) {
-                    mostrarLoadingLogin(false);
-                    mostrarErrorLogin('No se encontró una cuenta con esos datos. Verifica e intenta de nuevo.');
+                    toggleLoading('loadingLogin', false);
+                    mostrarError('errorMessageLogin', 'No se encontró una cuenta con ese correo. Verifica e intenta de nuevo.');
                     return;
                 }
                 
                 // Verificar si el usuario está activo
                 if (!usuario.activo) {
-                    mostrarLoadingLogin(false);
-                    mostrarErrorLogin('Tu pago aún no ha sido verificado. Te notificaremos por email cuando esté aprobado.');
+                    toggleLoading('loadingLogin', false);
+                    mostrarError('errorMessageLogin', 'Tu pago aún no ha sido verificado. Te notificaremos por email cuando esté aprobado.');
                     return;
                 }
                 
                 console.log('✅ Login exitoso:', usuario.nombre);
                 
                 // Login exitoso - redirigir a crear preguntas
-                mostrarLoadingLogin(false);
+                toggleLoading('loadingLogin', false);
                 
-                // Actualizar URL con el código y redirigir
+                // Guardar código en sessionStorage para acceso inmediato
+                sessionStorage.setItem('currentQuizCode', usuario.quiz_code);
+                
+                // Actualizar URL con el código (el evento hashchange manejará la navegación)
                 window.location.hash = `crear-preguntas?code=${usuario.quiz_code}`;
-                mostrarSeccion('crear-preguntas');
                 
             } catch (error) {
                 console.error('❌ Error en login:', error);
-                mostrarLoadingLogin(false);
-                mostrarErrorLogin('Hubo un error al verificar tus datos. Intenta de nuevo.');
-            }
-        }
-        
-        function mostrarErrorLogin(mensaje) {
-            const errorDiv = document.getElementById('errorMessageLogin');
-            errorDiv.textContent = mensaje;
-            errorDiv.classList.add('show');
-            
-            setTimeout(() => {
-                errorDiv.classList.remove('show');
-            }, 5000);
-        }
-        
-        function ocultarErrorLogin() {
-            document.getElementById('errorMessageLogin').classList.remove('show');
-        }
-        
-        function mostrarLoadingLogin(show) {
-            const loading = document.getElementById('loadingLogin');
-            if (show) {
-                loading.classList.add('show');
-            } else {
-                loading.classList.remove('show');
+                toggleLoading('loadingLogin', false);
+                mostrarError('errorMessageLogin', 'Hubo un error al verificar tus datos. Intenta de nuevo.');
             }
         }
     </script>
