@@ -3,15 +3,30 @@
 // ================================================
 
 // IMPORTANTE: Reemplaza estos valores con los de tu proyecto Supabase
-const SUPABASE_URL = 'https://jxehwjcvttmdiignotok.supabase.co'; // Ejemplo: https://xxxxx.supabase.co
+const SUPABASE_URL = 'https://jxehwjcvttmdiignotok.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp4ZWh3amN2dHRtZGlpZ25vdG9rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA1OTM5MjAsImV4cCI6MjA4NjE2OTkyMH0.vyts5ih-qd4p_zKyKsn0GvCDgWJgbReNZ4MwlKrB1cg';
 
 console.log('🔧 supabase-config.js cargando...');
+console.log('🔧 URL:', SUPABASE_URL);
+console.log('🔧 Key (primeros 20 chars):', SUPABASE_ANON_KEY.substring(0, 20) + '...');
 console.log('🔧 window.supabase disponible?', typeof window.supabase);
 
-// Inicializar cliente de Supabase
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-console.log('🔧 Cliente creado:', supabaseClient);
+// Inicializar cliente de Supabase con opciones para evitar error 406
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    db: {
+        schema: 'public'
+    },
+    auth: {
+        persistSession: false,
+        autoRefreshToken: false
+    },
+    global: {
+        headers: {
+            'Prefer': 'return=representation'
+        }
+    }
+});
+console.log('🔧 Cliente creado correctamente');
 
 // ================================================
 // CLASE PARA MANEJO DE BASE DE DATOS SUPABASE
@@ -74,7 +89,7 @@ class SupabaseQuiz {
                     correcta: pregunta.correcta
                 })
                 .select()
-                .single();
+                .maybeSingle();
             
             if (error) throw error;
             return data;
@@ -103,7 +118,7 @@ class SupabaseQuiz {
                     tiempo_total: tiempoTotal
                 })
                 .select()
-                .single();
+                .maybeSingle();
             
             if (error) throw error;
             
@@ -302,7 +317,7 @@ class SupabaseQuiz {
                     .from('usuarios')
                     .select('id')
                     .eq('quiz_code', codigo)
-                    .single();
+                    .maybeSingle();
                 
                 existe = !error && data !== null;
             }
@@ -331,10 +346,11 @@ class SupabaseQuiz {
                     numero_operacion: datos.numeroOperacion,
                     comprobante_url: datos.comprobanteUrl,
                     estado_pago: 'aprobado', // Cambiado: simular pago aprobado automáticamente
-                    activo: true // Cambiado: activar usuario inmediatamente
+                    activo: true, // Cambiado: activar usuario inmediatamente
+                    nombre_destinatario: null // Campo para el nombre de la persona a quien se dedica el quiz
                 })
                 .select()
-                .single();
+                .maybeSingle();
             
             if (error) throw error;
             return data;
@@ -351,17 +367,25 @@ class SupabaseQuiz {
      */
     async obtenerUsuarioPorCodigo(quizCode) {
         try {
+            console.log('🔍 Buscando usuario con código:', quizCode);
+            console.log('🔍 URL:', this.client.supabaseUrl);
+            
             const { data, error } = await this.client
                 .from('usuarios')
                 .select('*')
                 .eq('quiz_code', quizCode)
                 .eq('activo', true)
-                .single();
+                .maybeSingle();
             
-            if (error) throw error;
+            console.log('📊 Resultado:', { data, error });
+            
+            if (error) {
+                console.error('❌ Error en consulta:', error.message, error.details, error.hint);
+                throw error;
+            }
             return data;
         } catch (error) {
-            console.error('Error obteniendo usuario:', error);
+            console.error('❌ Error obteniendo usuario:', error);
             return null;
         }
     }
@@ -447,13 +471,37 @@ class SupabaseQuiz {
                     tiempo_total: tiempoTotal
                 })
                 .select()
-                .single();
+                .maybeSingle();
             
             if (error) throw error;
             return data;
         } catch (error) {
             console.error('Error guardando intento personalizado:', error);
             return null;
+        }
+    }
+    
+    /**
+     * Obtener preguntas personalizadas por código de quiz
+     * @param {string} quizCode - Código único del quiz
+     * @returns {Promise<Array>} Array de preguntas personalizadas
+     */
+    async obtenerPreguntasPorCodigo(quizCode) {
+        try {
+            // Primero obtener el usuario por código
+            const usuario = await this.obtenerUsuarioPorCodigo(quizCode);
+            if (!usuario) {
+                console.error('Usuario no encontrado con código:', quizCode);
+                return [];
+            }
+            
+            // Luego obtener las preguntas personalizadas de ese usuario
+            const preguntas = await this.obtenerPreguntasPersonalizadas(usuario.id);
+            
+            return preguntas;
+        } catch (error) {
+            console.error('Error obteniendo preguntas por código:', error);
+            return [];
         }
     }
     

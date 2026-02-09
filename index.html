@@ -415,12 +415,165 @@
         #crear-preguntas .btn-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 15px;
             margin-top: 20px;
         }
         
-        #crear-preguntas .btn-secondary {
+        #crear-preguntas .btn-group .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #crear-preguntas .btn-group .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+        
+        #crear-preguntas .btn-group .btn:hover::before {
+            width: 250px;
+            height: 250px;
+        }
+        
+        #crear-preguntas .btn-group .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+        }
+        
+        #crear-preguntas .btn-group .btn:active {
+            transform: translateY(0);
+        }
+        
+        #crear-preguntas .btn-group .btn-secondary {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.3);
+        }
+        
+        #crear-preguntas .btn-group .btn-secondary:hover {
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.5);
+        }
+        
+        #crear-preguntas .success-screen .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #crear-preguntas .success-screen .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        #crear-preguntas .success-screen .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        #crear-preguntas .success-screen .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+        }
+        
+        #crear-preguntas .success-screen .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        #crear-preguntas #btnGuardar {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 18px 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #crear-preguntas #btnGuardar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        #crear-preguntas #btnGuardar:hover:not(:disabled)::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        #crear-preguntas #btnGuardar:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+        
+        #crear-preguntas #btnGuardar:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+        
+        #crear-preguntas #btnGuardar:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        @keyframes pulse-btn {
+            0%, 100% {
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            }
+            50% {
+                box-shadow: 0 10px 40px rgba(102, 126, 234, 0.6);
+            }
+        }
+        
+        #crear-preguntas #btnGuardar:not(:disabled) {
+            animation: pulse-btn 2s ease-in-out infinite;
         }
         
         #crear-preguntas .error-message {
@@ -1068,7 +1221,7 @@
                     <!-- Título y dedicatoria en box blanca con efecto de flotación -->
                     <div class="titulo-box">
                         <h1>💘 Para Ti 💘</h1>
-                        <p class="dedicatoria">Rhi</p>
+                        <p class="dedicatoria">Con amor</p>
                     </div>
                     <!-- Textos descriptivos -->
                     <p class="descripcion">Preparé este quiz especial para ti</p>
@@ -1338,6 +1491,18 @@
                 <div class="progress-text" id="progressText">0 de 10 completadas</div>
                 
                 <form id="formPreguntas">
+                    <!-- Campo para nombre del destinatario -->
+                    <div class="pregunta-card" style="background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%); border: 2px solid #667eea;">
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <span style="font-size: 2rem;">💝</span>
+                        </div>
+                        <div class="form-group">
+                            <label style="text-align: center; color: #667eea; font-size: 1.1rem;">¿Para quién es este quiz? *</label>
+                            <input type="text" id="nombre-destinatario" required placeholder="Ej: María, Carlos, mi amor..." style="text-align: center; font-size: 1.1rem; font-weight: 600;">
+                            <p style="text-align: center; color: #999; font-size: 0.85rem; margin-top: 8px;">Este nombre aparecerá en la pantalla de bienvenida del quiz</p>
+                        </div>
+                    </div>
+                    
                     <div id="preguntasContainer"></div>
                     
                     <button type="submit" class="btn" id="btnGuardar">
@@ -1634,15 +1799,55 @@
                 }
             ];
             
-            // Intentar cargar preguntas desde preguntas.json
-            try {
-                const response = await fetch('preguntas.json');
-                const data = await response.json();
-                preguntasDemo = data.preguntas;
-                console.log('✅ Preguntas cargadas desde preguntas.json');
-            } catch (error) {
-                console.warn('⚠️ No se pudo cargar preguntas.json, usando preguntas por defecto');
-                preguntasDemo = preguntasDefault;
+            // Verificar si hay un código de quiz en la URL
+            const hash = window.location.hash; // Ej: #quiz?code=ABC123
+            const urlParams = new URLSearchParams(hash.split('?')[1] || '');
+            const quizCode = urlParams.get('code');
+            
+            if (quizCode) {
+                // Cargar preguntas personalizadas desde Supabase
+                console.log('🔍 Cargando preguntas personalizadas con código:', quizCode);
+                try {
+                    // Verificar que supabaseQuiz esté disponible
+                    if (typeof supabaseQuiz === 'undefined') {
+                        throw new Error('Supabase no está configurado');
+                    }
+                    
+                    const preguntasPersonalizadas = await supabaseQuiz.obtenerPreguntasPorCodigo(quizCode);
+                    
+                    if (preguntasPersonalizadas && preguntasPersonalizadas.length > 0) {
+                        // Las preguntas ya vienen en el formato correcto desde Supabase
+                        preguntasDemo = preguntasPersonalizadas;
+                        console.log('✅ Preguntas personalizadas cargadas:', preguntasDemo.length);
+                        
+                        // Cargar el nombre del destinatario
+                        const usuario = await supabaseQuiz.obtenerUsuarioPorCodigo(quizCode);
+                        if (usuario && usuario.nombre_destinatario) {
+                            // Actualizar el nombre en la pantalla de bienvenida
+                            const dedicatoriaElement = document.querySelector('#quiz .dedicatoria');
+                            if (dedicatoriaElement) {
+                                dedicatoriaElement.textContent = usuario.nombre_destinatario;
+                            }
+                        }
+                    } else {
+                        console.warn('⚠️ No se encontraron preguntas para el código:', quizCode);
+                        preguntasDemo = preguntasDefault;
+                    }
+                } catch (error) {
+                    console.error('❌ Error cargando preguntas personalizadas:', error);
+                    preguntasDemo = preguntasDefault;
+                }
+            } else {
+                // Intentar cargar preguntas desde preguntas.json (modo demo)
+                try {
+                    const response = await fetch('preguntas.json');
+                    const data = await response.json();
+                    preguntasDemo = data.preguntas;
+                    console.log('✅ Preguntas cargadas desde preguntas.json');
+                } catch (error) {
+                    console.warn('⚠️ No se pudo cargar preguntas.json, usando preguntas por defecto');
+                    preguntasDemo = preguntasDefault;
+                }
             }
             
             // Resetear variables
@@ -2104,6 +2309,15 @@
             btnGuardar.textContent = 'Guardando...';
             
             try {
+                // Obtener nombre del destinatario
+                const nombreDestinatario = document.getElementById('nombre-destinatario').value.trim();
+                
+                // Actualizar el nombre del destinatario en la tabla usuarios
+                await supabaseQuiz.client
+                    .from('usuarios')
+                    .update({ nombre_destinatario: nombreDestinatario })
+                    .eq('id', usuarioActual.id);
+                
                 const preguntas = [];
                 
                 for (let i = 1; i <= 10; i++) {
