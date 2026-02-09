@@ -459,6 +459,9 @@
                 
                 // Si es la sección quiz, inicializar el quiz con preguntas.json
                 if (seccionId === 'quiz') {
+                    window.scrollTo(0, 0);
+                    document.documentElement.scrollTop = 0;
+                    document.body.scrollTop = 0;
                     iniciarQuizDemo();
                 }
                 
