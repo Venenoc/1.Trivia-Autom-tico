@@ -1,125 +1,230 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Configuración de caracteres UTF-8 para caracteres especiales y emojis -->
     <meta charset="UTF-8">
-    <!-- Configuración responsive para móviles -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Quiz San Valentín</title>
-    <!-- Favicon con emoji de corazón -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz San Valentín - Crea tu Quiz Personalizado</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
-    <!-- Enlace a la hoja de estilos CSS -->
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 18px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .btn-demo {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+        
+        .btn-demo:hover {
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.6);
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn-login:hover {
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6);
+        }
+        
+        .features {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .features h3 {
+            color: #333;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .feature-list {
+            text-align: left;
+            list-style: none;
+        }
+        
+        .feature-list li {
+            color: #666;
+            font-size: 0.95rem;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list li::before {
+            content: "✓";
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .footer {
+            margin-top: 25px;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 35px 25px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 16px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
     
-    <!-- Contenedor principal - Formato 9:16 con fondo de imagen -->
     <div class="container">
+        <div class="logo">💝</div>
+        <h1>Quiz San Valentín</h1>
+        <p class="subtitle">
+            Crea un quiz personalizado para esa persona especial.
+            ¡Comparte el link y descubre qué tanto te conoce!
+        </p>
         
-        <!-- ==========================================
-             SECCIÓN 1: PANTALLA DE BIENVENIDA
-             - Muestra dedicatoria personal
-             - Botón para iniciar el quiz
-             ========================================== -->
-        <section id="bienvenida" class="seccion active">
-            <div class="contenido">
-                <!-- Título y dedicatoria en box blanca con efecto de flotación -->
-                <div class="titulo-box">
-                    <h1>💘 Para Ti 💘</h1>
-                    <p class="dedicatoria">Rhi</p>
-                </div>
-                <!-- Textos descriptivos -->
-                <p class="descripcion">Preparé este quiz especial para ti</p>
-                <p class="descripcion">¿Qué tanto me conoces?</p>
-                <!-- Botón principal para iniciar -->
-                <button id="btn-empezar" class="btn-principal">¡Empezar!</button>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             SECCIÓN 2: PREGUNTAS DEL QUIZ
-             - Preguntas dinámicas con contador
-             - Opciones de respuesta A, B, C
-             ========================================== -->
-        <section id="pregunta" class="seccion">
-            <!-- Número de pregunta en la esquina del fondo -->
-            <div class="numero-pregunta">1</div>
-            <!-- Contador de tiempo -->
-            <div class="contador-tiempo">
-                <svg class="cronometro-svg" viewBox="0 0 100 100">
-                    <circle class="cronometro-fondo" cx="50" cy="50" r="45"></circle>
-                    <circle class="cronometro-progreso" cx="50" cy="50" r="45"></circle>
-                </svg>
-                <span class="tiempo-numero">10</span>
-            </div>
-            <div class="contenido-quiz">
-                <!-- Texto de la pregunta -->
-                <div class="pregunta-box">
-                    <h2 class="pregunta-texto">¿Dónde fue nuestra primera cita?</h2>
-                </div>
-                <!-- Opciones de respuesta -->
-                <div class="opciones">
-                    <button class="opcion-btn" data-respuesta="A">
-                        <span class="letra">A</span>
-                        <span class="texto">Un restaurante</span>
-                    </button>
-                    <button class="opcion-btn" data-respuesta="B">
-                        <span class="letra">B</span>
-                        <span class="texto">En casa</span>
-                    </button>
-                    <button class="opcion-btn" data-respuesta="C">
-                        <span class="letra">C</span>
-                        <span class="texto">Otro lugar especial</span>
-                    </button>
-                </div>
-                <!-- Área inferior: Puntaje y botón siguiente -->
-                <div class="quiz-footer">
-                    <div class="puntaje">
-                        <span class="puntaje-label">Puntaje:</span>
-                        <span class="puntaje-numero">0</span>
-                    </div>
-                    <button id="btn-siguiente" class="btn-siguiente">Siguiente</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             SECCIÓN 3: RESULTADOS FINALES
-             - Muestra puntaje total
-             - Mensaje personalizado
-             - Botón para reiniciar
-             ========================================== -->
-        <section id="resultados" class="seccion">
-            <div class="contenido">
-                <div class="resultados-box">
-                    <h1 class="titulo-resultado">¡Terminaste! 🎉</h1>
-                    <div class="puntaje-final">
-                        <span class="puntaje-final-numero">0</span>
-                        <span class="puntaje-final-total">/ 100</span>
-                    </div>
-                    <p class="mensaje-resultado">¡Excelente trabajo!</p>
-                    <p class="intento-numero" style="font-size: 14px; opacity: 0.8; margin-top: 15px;"></p>
-                    <button id="btn-reiniciar" class="btn-principal">Jugar de nuevo</button>
-                </div>
-            </div>
-        </section>
-
+        <div class="button-group">
+            <button class="btn btn-create" onclick="irACrear()">
+                <span>🎨</span>
+                <span>Crear Mi Quiz</span>
+            </button>
+            
+            <button class="btn btn-demo" onclick="irADemo()">
+                <span>👀</span>
+                <span>Ver Demo</span>
+            </button>
+            
+            <button class="btn btn-login" onclick="irALogin()">
+                <span>🔐</span>
+                <span>Ya tengo cuenta</span>
+            </button>
+        </div>
+        
+        <div class="features">
+            <h3>✨ ¿Qué incluye?</h3>
+            <ul class="feature-list">
+                <li>10 preguntas personalizadas</li>
+                <li>Link único para compartir</li>
+                <li>Seguimiento de resultados</li>
+                <li>Válido para siempre</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            💘 Especial San Valentín 2026
+        </div>
     </div>
-
-    <!-- Audio del quiz -->
-    <audio id="audio-quiz" src="assets/shallow.mp3"></audio>
-
-    <!-- Librería de Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <!-- Configuración de Supabase -->
-    <script src="supabase-config.js"></script>
-
-    <!-- Enlace al archivo JavaScript -->
-    <script src="script.js"></script>
+    <script>
+        function irACrear() {
+            window.location.href = 'registro.html';
+        }
+        
+        function irADemo() {
+            // Redirigir al quiz normal sin código
+            window.location.href = 'index.html';
+        }
+        
+        function irALogin() {
+            // Próximamente: sistema de login
+            alert('🚧 Sistema de login en desarrollo.\n\nPor ahora, si ya creaste tu quiz, busca en tu email el link personalizado que te enviamos.');
+        }
+    </script>
+    
 </body>
 </html>
-

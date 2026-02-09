@@ -619,7 +619,7 @@
         function mostrarLinkFinal() {
             document.getElementById('loadingInicial').classList.remove('show');
             const baseURL = window.location.origin + window.location.pathname.replace('crear-preguntas.html', '');
-            const linkCompleto = `${baseURL}#quiz/${quizCode}`;
+            const linkCompleto = `${baseURL}quiz-viewer.html#quiz/${quizCode}`;
             
             document.getElementById('formularioPreguntas').style.display = 'none';
             document.getElementById('linkFinal').textContent = linkCompleto;
