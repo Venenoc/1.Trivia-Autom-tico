@@ -1827,7 +1827,7 @@ h1 {
     min-height: 100dvh;
     padding: 30px 20px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     overflow-y: auto;
 }
