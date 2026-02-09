@@ -9,6 +9,13 @@
     <title>Quiz San Valentín - Crea tu Quiz Personalizado</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Prevenir scroll restoration del navegador -->
+    <script>
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+    </script>
 </head>
 <body>
     
@@ -472,6 +479,16 @@
                 
                 // Scroll al top
                 window.scrollTo(0, 0);
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+                
+                // Si es landing, asegurar que el contenedor también esté al top
+                if (seccionId === 'landing') {
+                    const landingContainer = document.querySelector('#landing .landing-container');
+                    if (landingContainer) {
+                        landingContainer.scrollTop = 0;
+                    }
+                }
             }
         }
         
@@ -481,6 +498,17 @@
         
         // Detectar hash en URL al cargar la página
         window.addEventListener('load', () => {
+            // Asegurar que la página cargue en la parte superior
+            window.scrollTo(0, 0);
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+            
+            // Asegurar que el contenedor landing también esté al top
+            const landingContainer = document.querySelector('#landing .landing-container');
+            if (landingContainer) {
+                landingContainer.scrollTop = 0;
+            }
+            
             const hash = window.location.hash.substring(1); // Eliminar el #
             if (hash) {
                 // Extraer sección del hash (ej: "crear-preguntas?code=XXX" -> "crear-preguntas")
@@ -1585,6 +1613,33 @@
                 mostrarError('errorMessageLogin', 'Hubo un error al verificar tus datos. Intenta de nuevo.');
             }
         }
+    </script>
+
+    <!-- Script para asegurar scroll top al cargar -->
+    <script>
+        // Ejecutar inmediatamente para prevenir scroll inicial
+        (function() {
+            // Forzar scroll a la parte superior
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+            window.scrollTo(0, 0);
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        })();
+        
+        // También al cargar completamente el DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            window.scrollTo(0, 0);
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+            
+            // Asegurar que el contenedor landing esté al top
+            const landingContainer = document.querySelector('#landing .landing-container');
+            if (landingContainer) {
+                landingContainer.scrollTop = 0;
+            }
+        });
     </script>
 
 </body>
