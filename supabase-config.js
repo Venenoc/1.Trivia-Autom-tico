@@ -330,8 +330,8 @@ class SupabaseQuiz {
                     metodo_pago: datos.metodoPago,
                     numero_operacion: datos.numeroOperacion,
                     comprobante_url: datos.comprobanteUrl,
-                    estado_pago: 'pendiente',
-                    activo: false
+                    estado_pago: 'aprobado', // Cambiado: simular pago aprobado automáticamente
+                    activo: true // Cambiado: activar usuario inmediatamente
                 })
                 .select()
                 .single();

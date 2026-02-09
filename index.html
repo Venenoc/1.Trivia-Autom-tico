@@ -2,39 +2,77 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Quiz San Valentín - Crea tu Quiz Personalizado</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💖</text></svg>">
+    <link rel="stylesheet" href="style.css">
     <style>
-        * {
+        /* ================================================
+           ESTILOS GLOBALES
+           ================================================ */
+        
+        /* Reset body para secciones en pantalla completa */
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            overflow-x: hidden;
         }
         
-        body {
+        /* Estilos para las secciones */
+        .section {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1;
+        }
+        
+        .section.active {
+            display: block;
+            z-index: 10;
+        }
+        
+        /* ================================================
+           SECCIÓN HOME / LANDING
+           ================================================ */
+        
+        /* Landing styles - formato 9:16 */
+        #landing {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 10px;
         }
         
-        .container {
+        #landing .landing-container {
+            width: min(420px, 100%);
+            max-height: 90vh;
+            max-height: 90dvh;
+            aspect-ratio: 9 / 16;
             background: white;
-            border-radius: 25px;
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
-            padding: 50px 40px;
-            max-width: 500px;
-            width: 100%;
+            border-radius: 15px;
+            overflow-y: auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px 30px;
             text-align: center;
         }
         
-        .logo {
+        #landing .logo {
             font-size: 4rem;
-            margin-bottom: 15px;
+            margin-top: -40px;
+            margin-bottom: 10px;
             animation: pulse 2s ease-in-out infinite;
         }
         
@@ -43,34 +81,34 @@
             50% { transform: scale(1.1); }
         }
         
-        h1 {
+        #landing h1 {
             color: #667eea;
-            font-size: 2.2rem;
-            margin-bottom: 15px;
+            font-size: 2rem;
+            margin-bottom: 10px;
             font-weight: 700;
         }
         
-        .subtitle {
+        #landing .subtitle {
             color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 35px;
+            font-size: 1rem;
+            margin-bottom: 20px;
             line-height: 1.6;
         }
         
-        .button-group {
+        #landing .button-group {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
         
-        .btn {
+        #landing .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
             border-radius: 15px;
-            padding: 18px 30px;
-            font-size: 1.1rem;
+            padding: 15px 25px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -81,150 +119,2389 @@
             gap: 10px;
         }
         
-        .btn:hover {
+        #landing .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
         }
         
-        .btn:active {
+        #landing .btn:active {
             transform: translateY(-1px);
         }
         
-        .btn-demo {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
-        }
-        
-        .btn-demo:hover {
-            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.6);
-        }
-        
-        .btn-login {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
-        }
-        
-        .btn-login:hover {
-            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6);
-        }
-        
-        .features {
+        #landing .features {
             background: #f8f9fa;
             border-radius: 15px;
-            padding: 20px;
-            margin-top: 30px;
+            padding: 15px;
+            margin-top: 15px;
         }
         
-        .features h3 {
+        #landing .features h3 {
             color: #333;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
+            font-size: 1rem;
+            margin-bottom: 10px;
         }
         
-        .feature-list {
+        #landing .feature-list {
             text-align: left;
             list-style: none;
         }
         
-        .feature-list li {
+        #landing .feature-list li {
             color: #666;
-            font-size: 0.95rem;
-            padding: 8px 0;
+            font-size: 0.9rem;
+            padding: 6px 0;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         
-        .feature-list li::before {
+        #landing .feature-list li::before {
             content: "✓";
             color: #667eea;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
         
-        .footer {
-            margin-top: 25px;
+        #landing .footer {
+            margin-top: 15px;
             color: #999;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
+        
+        .btn-secundario {
+            background: #f0f0f0;
+            color: #666;
+            border: none;
+            border-radius: 15px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secundario:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        /* ================================================
+           SECCIÓN CREAR PREGUNTAS
+           ================================================ */
+        
+        #crear-preguntas {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        
+        #crear-preguntas .crear-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+        
+        #crear-preguntas .header-crear {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        #crear-preguntas .header-crear h1 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        #crear-preguntas .header-crear .subtitle {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        #crear-preguntas .progress {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        #crear-preguntas .progress-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        #crear-preguntas .progress-text {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+        
+        #crear-preguntas .pregunta-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            animation: slideIn 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        #crear-preguntas .pregunta-numero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        #crear-preguntas .form-group {
+            margin-bottom: 18px;
+        }
+        
+        #crear-preguntas .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        #crear-preguntas input[type="text"],
+        #crear-preguntas textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        
+        #crear-preguntas textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        #crear-preguntas input:focus,
+        #crear-preguntas textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        #crear-preguntas .opciones-grid {
+            display: grid;
+            gap: 12px;
+        }
+        
+        #crear-preguntas .opcion-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #crear-preguntas .opcion-label {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        #crear-preguntas .opcion-input {
+            flex: 1;
+        }
+        
+        #crear-preguntas .correcta-select {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        #crear-preguntas .radio-option {
+            flex: 1;
+            position: relative;
+        }
+        
+        #crear-preguntas .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        #crear-preguntas .radio-option label {
+            display: block;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #crear-preguntas .radio-option input[type="radio"]:checked + label {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        #crear-preguntas .success-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        #crear-preguntas .success-screen.show {
+            display: block;
+        }
+        
+        #crear-preguntas .success-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 0.6s;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        #crear-preguntas .link-box {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        #crear-preguntas .link-box h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        #crear-preguntas .link-display {
+            background: white;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            word-break: break-all;
+            margin: 15px 0;
+            color: #667eea;
+        }
+        
+        #crear-preguntas .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        #crear-preguntas .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        #crear-preguntas .error-message {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 8px;
+            color: #721c24;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        #crear-preguntas .error-message.show {
+            display: block;
+        }
+        
+        #crear-preguntas .loading {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+        
+        #crear-preguntas .loading.show {
+            display: block;
+        }
+        
+        #crear-preguntas .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ================================================
+           SECCIÓN REGISTRO
+           ================================================ */
+        
+        #registro {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        
+        #registro .registro-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+        
+        #registro .header-registro {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        
+        #registro .back-btn-registro {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        #registro .back-btn-registro:hover {
+            transform: translateX(-3px);
+        }
+        
+        #registro .header-registro h1 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        #registro .header-registro .subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        #registro .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        #registro .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 25%;
+            right: 25%;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+        
+        #registro .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        #registro .step-circle {
+            width: 30px;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        #registro .step.active .step-circle {
+            background: #667eea;
+        }
+        
+        #registro .step.complete .step-circle {
+            background: #4caf50;
+        }
+        
+        #registro .step-label {
+            font-size: 0.85rem;
+            color: #999;
+        }
+        
+        #registro .step.active .step-label {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        #registro .form-section {
+            display: none;
+        }
+        
+        #registro .form-section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        #registro .form-group {
+            margin-bottom: 20px;
+        }
+        
+        #registro .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        #registro input[type="text"],
+        #registro input[type="email"],
+        #registro select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        #registro input:focus,
+        #registro select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        #registro .file-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #registro .file-upload:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        #registro .file-upload input[type="file"] {
+            display: none;
+        }
+        
+        #registro .file-upload-label {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        #registro .file-name {
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        #registro .payment-info {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        #registro .payment-info h3 {
+            color: #856404;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        
+        #registro .payment-info p {
+            color: #856404;
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+        
+        #registro .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        #registro .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        #registro .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #registro .btn-secondary {
+            background: #e0e0e0;
+            color: #666;
+        }
+        
+        #registro .btn-secondary:hover:not(:disabled) {
+            background: #d0d0d0;
+            box-shadow: none;
+        }
+        
+        #registro .success-message {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            border-radius: 8px;
+            color: #155724;
+            text-align: center;
+        }
+        
+        #registro .success-message h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        #registro .error-message {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 8px;
+            color: #721c24;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        #registro .error-message.show {
+            display: block;
+        }
+        
+        #registro .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        #registro .loading.show {
+            display: block;
+        }
+        
+        #registro .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spinReg 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spinReg {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ================================================
+           SECCIÓN LOGIN
+           ================================================ */
+        
+        #login {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+        
+        #login .login-container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+        
+        #login .header-login {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        
+        #login .back-btn-login {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        #login .back-btn-login:hover {
+            transform: translateX(-3px);
+        }
+        
+        #login .header-login h1 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        #login .header-login .subtitle {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        #login .form-group {
+            margin-bottom: 20px;
+        }
+        
+        #login .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        #login input[type="text"],
+        #login input[type="email"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        #login input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        #login .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        #login .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        #login .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #login .error-message {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 8px;
+            color: #721c24;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        #login .error-message.show {
+            display: block;
+        }
+        
+        #login .info-message {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            color: #0c5460;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        #login .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        
+        #login .loading.show {
+            display: block;
+        }
+        
+        #login .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spinLogin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spinLogin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #login .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        #login .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+        
+        #login .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        #login .register-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        #login .register-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        #login .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        /* ================================================
+           SECCIÓN QUIZ
+           ================================================ */
+        
+        /* Quiz section - mismo formato 9:16 que HOME */
+        #quiz {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+        
+        #quiz .container {
+            width: min(420px, 100%);
+            max-height: 90vh;
+            max-height: 90dvh;
+            aspect-ratio: 9 / 16;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* ================================================
+           RESPONSIVE (HOME)
+           ================================================ */
         
         @media (max-width: 600px) {
-            .container {
-                padding: 35px 25px;
+            #landing .landing-container {
+                padding: 25px 20px;
+                width: 100%;
+                max-height: 95vh;
+                max-height: 95dvh;
             }
             
-            h1 {
-                font-size: 1.8rem;
+            #landing h1 {
+                font-size: 1.7rem;
             }
             
-            .subtitle {
-                font-size: 1rem;
+            #landing .subtitle {
+                font-size: 0.9rem;
             }
             
-            .btn {
-                padding: 16px 25px;
-                font-size: 1rem;
+            #landing .btn {
+                padding: 14px 20px;
+                font-size: 0.95rem;
+            }
+            
+            #landing .logo {
+                font-size: 3.5rem;
+            }
+            
+            /* RESPONSIVE QUIZ */
+            #quiz .container {
+                width: 100%;
+                max-height: 95vh;
+                max-height: 95dvh;
             }
         }
     </style>
 </head>
 <body>
     
-    <div class="container">
-        <div class="logo">💝</div>
-        <h1>Quiz San Valentín</h1>
-        <p class="subtitle">
-            Crea un quiz personalizado para esa persona especial.
-            ¡Comparte el link y descubre qué tanto te conoce!
-        </p>
-        
-        <div class="button-group">
-            <button class="btn btn-create" onclick="irACrear()">
-                <span>🎨</span>
-                <span>Crear Mi Quiz</span>
-            </button>
+    <!-- ================================================
+         HTML - SECCIÓN HOME / LANDING
+         ================================================ -->
+    <section id="landing" class="section active">
+        <div class="landing-container">
+            <div class="logo">💝</div>
+            <h1>Crea tu Quiz San Valentín</h1>
+            <p class="subtitle">
+                Crea un quiz personalizado para esa persona especial.
+                ¡Comparte el link y descubre qué tanto te conoce!
+            </p>
             
-            <button class="btn btn-demo" onclick="irADemo()">
-                <span>👀</span>
-                <span>Ver Demo</span>
-            </button>
+            <div class="button-group">
+                <button class="btn btn-demo" onclick="mostrarSeccion('quiz')">
+                    <span>Ver Demo</span>
+                </button>
+                
+                <button class="btn btn-create" onclick="mostrarSeccion('registro')">
+                    <span>Crear cuenta</span>
+                </button>
+                
+                <button class="btn btn-login" onclick="irALogin()">
+                    <span>Iniciar sesión</span>
+                </button>
+            </div>
             
-            <button class="btn btn-login" onclick="irALogin()">
-                <span>🔐</span>
-                <span>Ya tengo cuenta</span>
-            </button>
+            <div class="features">
+                <h3>✨ ¿Qué incluye?</h3>
+                <ul class="feature-list">
+                    <li>10 preguntas personalizadas</li>
+                    <li>Link único para compartir</li>
+                    <li>Válido para siempre</li>
+                </ul>
+            </div>
+            
+            <div class="footer">
+                💘 Especial San Valentín 2026
+            </div>
         </div>
-        
-        <div class="features">
-            <h3>✨ ¿Qué incluye?</h3>
-            <ul class="feature-list">
-                <li>10 preguntas personalizadas</li>
-                <li>Link único para compartir</li>
-                <li>Seguimiento de resultados</li>
-                <li>Válido para siempre</li>
-            </ul>
+    </section>
+
+    <!-- ================================================
+         HTML - SECCIÓN QUIZ DEMO
+         ================================================ -->
+    <section id="quiz" class="section">
+        <!-- Contenedor principal - Formato 9:16 con fondo de imagen -->
+        <div class="container">
+            
+            <!-- ==========================================
+                 SECCIÓN 1: PANTALLA DE BIENVENIDA
+                 - Muestra dedicatoria personal
+                 - Botón para iniciar el quiz
+                 ========================================== -->
+            <section id="bienvenida" class="seccion active">
+                <div class="contenido">
+                    <!-- Título y dedicatoria en box blanca con efecto de flotación -->
+                    <div class="titulo-box">
+                        <h1>💘 Para Ti 💘</h1>
+                        <p class="dedicatoria">Rhi</p>
+                    </div>
+                    <!-- Textos descriptivos -->
+                    <p class="descripcion">Preparé este quiz especial para ti</p>
+                    <p class="descripcion">¿Qué tanto me conoces?</p>
+                    <!-- Botón principal para iniciar -->
+                    <button id="btn-empezar" class="btn-principal">¡Empezar!</button>
+                    <button onclick="mostrarSeccion('landing')" class="btn-secundario" style="margin-top: 15px;">← Volver al inicio</button>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SECCIÓN 2: PREGUNTAS DEL QUIZ
+                 - Preguntas dinámicas con contador
+                 - Opciones de respuesta A, B, C
+                 ========================================== -->
+            <section id="pregunta" class="seccion">
+                <!-- Número de pregunta en la esquina del fondo -->
+                <div class="numero-pregunta">1</div>
+                <!-- Contador de tiempo -->
+                <div class="contador-tiempo">
+                    <svg class="cronometro-svg" viewBox="0 0 100 100">
+                        <circle class="cronometro-fondo" cx="50" cy="50" r="45"></circle>
+                        <circle class="cronometro-progreso" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <span class="tiempo-numero">10</span>
+                </div>
+                <div class="contenido-quiz">
+                    <!-- Texto de la pregunta -->
+                    <div class="pregunta-box">
+                        <h2 class="pregunta-texto">¿Dónde fue nuestra primera cita?</h2>
+                    </div>
+                    <!-- Opciones de respuesta -->
+                    <div class="opciones">
+                        <button class="opcion-btn" data-respuesta="A">
+                            <span class="letra">A</span>
+                            <span class="texto">Un restaurante</span>
+                        </button>
+                        <button class="opcion-btn" data-respuesta="B">
+                            <span class="letra">B</span>
+                            <span class="texto">En casa</span>
+                        </button>
+                        <button class="opcion-btn" data-respuesta="C">
+                            <span class="letra">C</span>
+                            <span class="texto">Otro lugar especial</span>
+                        </button>
+                    </div>
+                    <!-- Área inferior: Puntaje y botón siguiente -->
+                    <div class="quiz-footer">
+                        <div class="puntaje">
+                            <span class="puntaje-label">Puntaje:</span>
+                            <span class="puntaje-numero">0</span>
+                        </div>
+                        <button id="btn-siguiente" class="btn-siguiente">Siguiente</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SECCIÓN 3: RESULTADOS FINALES
+                 - Muestra puntaje total
+                 - Mensaje personalizado
+                 - Botón para reiniciar
+                 ========================================== -->
+            <section id="resultados" class="seccion">
+                <div class="contenido">
+                    <div class="resultados-box">
+                        <h1 class="titulo-resultado">¡Terminaste! 🎉</h1>
+                        <div class="puntaje-final">
+                            <span class="puntaje-final-numero">0</span>
+                            <span class="puntaje-final-total">/ 100</span>
+                        </div>
+                        <p class="mensaje-resultado">¡Excelente trabajo!</p>
+                        <p class="intento-numero" style="font-size: 14px; opacity: 0.8; margin-top: 15px;"></p>
+                        <button id="btn-reiniciar" class="btn-principal">Jugar de nuevo</button>
+                        <button onclick="mostrarSeccion('landing')" class="btn-secundario" style="margin-top: 15px;">← Volver al inicio</button>
+                    </div>
+                </div>
+            </section>
+
         </div>
-        
-        <div class="footer">
-            💘 Especial San Valentín 2026
+
+        <!-- Audio del quiz -->
+        <audio id="audio-quiz" src="assets/shallow.mp3"></audio>
+    </section>
+
+    <!-- ================================================
+         HTML - SECCIÓN LOGIN
+         ================================================ -->
+    <section id="login" class="section">
+        <div class="login-container">
+            <a class="back-btn-login" onclick="mostrarSeccion('landing')">← Volver</a>
+            
+            <div class="header-login">
+                <h1>Iniciar Sesión 🔑</h1>
+                <p class="subtitle">Accede con tu email o código de quiz</p>
+            </div>
+            
+            <div class="error-message" id="errorMessageLogin"></div>
+            <div class="loading" id="loadingLogin">
+                <div class="spinner"></div>
+                <p>Verificando...</p>
+            </div>
+            
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="email-login">Email *</label>
+                    <input type="email" id="email-login" required placeholder="tu@email.com">
+                </div>
+                
+                <div class="divider">
+                    <span>O</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="codigo-login">Código de Quiz</label>
+                    <input type="text" id="codigo-login" placeholder="Ej: ABC12345" style="text-transform: uppercase;">
+                </div>
+                
+                <div class="info-message">
+                    💡 Puedes ingresar tu email o el código de quiz que recibiste al registrarte.
+                </div>
+                
+                <button type="submit" class="btn">Iniciar Sesión →</button>
+            </form>
+            
+            <div class="register-link">
+                ¿No tienes cuenta? <a onclick="mostrarSeccion('registro')">Regístrate aquí</a>
+            </div>
         </div>
-    </div>
-    
+    </section>
+
+    <!-- ================================================
+         HTML - SECCIÓN REGISTRO
+         ================================================ -->
+    <section id="registro" class="section">
+        <div class="registro-container">
+            <a class="back-btn-registro" onclick="mostrarSeccion('landing')">← Volver</a>
+            
+            <div class="header-registro">
+                <h1>Crear Mi Quiz 💝</h1>
+                <p class="subtitle">Completa los 3 pasos para crear tu quiz personalizado</p>
+            </div>
+            
+            <div class="step-indicator">
+                <div class="step active" id="step1-indicator-reg">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Datos</div>
+                </div>
+                <div class="step" id="step2-indicator-reg">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Pago</div>
+                </div>
+                <div class="step" id="step3-indicator-reg">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Confirmación</div>
+                </div>
+            </div>
+            
+            <div class="error-message" id="errorMessageReg"></div>
+            <div class="loading" id="loadingReg">
+                <div class="spinner"></div>
+                <p>Procesando...</p>
+            </div>
+            
+            <!-- PASO 1: Datos Personales -->
+            <div class="form-section active" id="paso1-reg">
+                <form id="form-datos-reg">
+                   <div class="form-group">
+                        <label for="nombre-reg">Tu Nombre *</label>
+                        <input type="text" id="nombre-reg" required placeholder="Ej: Carlos">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email-reg">Tu Email *</label>
+                        <input type="email" id="email-reg" required placeholder="tu@email.com">
+                    </div>
+                    
+                    <button type="submit" class="btn">Continuar al Pago →</button>
+                </form>
+            </div>
+            
+            <!-- PASO 2: Información de Pago -->
+            <div class="form-section" id="paso2-reg">
+                <div class="payment-info">
+                    <h3>💳 Información de Pago</h3>
+                    <p><strong>Precio:</strong> S/ 10.00 (Promo San Valentín)</p>
+                    <p><strong>Yape:</strong> 987654321</p>
+                    <p><strong>BCP:</strong> 19X-XXXXXXX-X-XX</p>
+                    <p style="margin-top: 10px;">Realiza la transferencia y sube tu comprobante</p>
+                </div>
+                
+                <form id="form-pago-reg">
+                    <div class="form-group">
+                        <label for="metodo-pago-reg">Método de Pago *</label>
+                        <select id="metodo-pago-reg" required>
+                            <option value="">Selecciona...</option>
+                            <option value="yape">Yape</option>
+                            <option value="transferencia">Transferencia Bancaria</option>
+                            <option value="plin">Plin</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="numero-operacion-reg">Número de Operación *</label>
+                        <input type="text" id="numero-operacion-reg" required placeholder="Ej: 0012345678">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Comprobante de Pago *</label>
+                        <div class="file-upload" onclick="document.getElementById('comprobante-reg').click()">
+                            <input type="file" id="comprobante-reg" accept="image/*" required>
+                            <div class="file-upload-label">📸 Click para subir captura</div>
+                            <div class="file-name" id="fileName-reg">JPG, PNG - Máx 5MB</div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn-secondary" onclick="volverPaso1Reg()">← Atrás</button>
+                    <button type="submit" class="btn">Confirmar y Continuar →</button>
+                </form>
+            </div>
+            
+            <!-- PASO 3: Confirmación -->
+            <div class="form-section" id="paso3-reg">
+                <div class="success-message">
+                    <h2>¡Pago Aprobado! ✅ 💖</h2>
+                    <p style="margin: 15px 0;">Tu cuenta ha sido creada correctamente y tu pago fue verificado.</p>
+                    <p style="margin-top: 20px; font-size: 0.95rem;">
+                        ¡Todo listo! 🎉 Ya puedes iniciar sesión para crear tu quiz personalizado.
+                    </p>
+                </div>
+                
+                <button class="btn" onclick="irALoginDesdeRegistro()">Iniciar Sesión</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================
+         HTML - SECCIÓN CREAR PREGUNTAS
+         ================================================ -->
+    <section id="crear-preguntas" class="section">
+        <div class="crear-container">
+            <!-- PANTALLA DE CARGA INICIAL -->
+            <div class="loading show" id="loadingInicial">
+                <div class="spinner"></div>
+                <p>Verificando acceso...</p>
+            </div>
+            
+            <!-- ERROR DE ACCESO -->
+            <div class="error-message" id="errorAcceso">
+                <strong>⚠️ Acceso no autorizado</strong>
+                <p id="errorAccesoTexto"></p>
+                <button class="btn" onclick="mostrarSeccion('landing')">Volver al Inicio</button>
+            </div>
+            
+            <!-- FORMULARIO DE PREGUNTAS -->
+            <div id="formularioPreguntas" style="display: none;">
+                <div class="header-crear">
+                    <h1>Crea tus 10 Preguntas 💝</h1>
+                    <p class="subtitle">
+                        Personaliza tu quiz con preguntas que solo esa persona especial podrá responder correctamente.
+                    </p>
+                </div>
+                
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+                <div class="progress-text" id="progressText">0 de 10 completadas</div>
+                
+                <form id="formPreguntas">
+                    <div id="preguntasContainer"></div>
+                    
+                    <button type="submit" class="btn" id="btnGuardar">
+                        Guardar Quiz y Obtener Link 🎉
+                    </button>
+                </form>
+            </div>
+            
+            <!-- PANTALLA DE ÉXITO -->
+            <div class="success-screen" id="successScreen">
+                <div class="success-icon">🎉</div>
+                <h1 style="color: #667eea; margin-bottom: 15px;">¡Quiz Creado Exitosamente!</h1>
+                <p style="color: #666; margin-bottom: 25px;">
+                    Tu quiz personalizado está listo. Comparte este link con esa persona especial:
+                </p>
+                
+                <div class="link-box">
+                    <h3>🔗 Tu Link Único</h3>
+                    <div class="link-display" id="linkFinal"></div>
+                    
+                    <div class="btn-group">
+                        <button class="btn" onclick="copiarLink()">
+                            📋 Copiar Link
+                        </button>
+                        <button class="btn btn-secondary" onclick="compartirWhatsApp()">
+                            💬 WhatsApp
+                        </button>
+                    </div>
+                </div>
+                
+                <p style="color: #999; font-size: 0.9rem; margin-top: 20px;">
+                    💡 Guarda este link en un lugar seguro. Podrás compartirlo las veces que quieras.
+                </p>
+                
+                <button class="btn" onclick="mostrarSeccion('landing')" style="margin-top: 30px;">
+                    Volver al Inicio
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================
+         SCRIPTS - NAVEGACIÓN Y FUNCIONALIDAD
+         ================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
     <script>
-        function irACrear() {
-            window.location.href = 'registro.html';
-        }
+        /* ================================================
+           SCRIPTS GLOBALES - Navegación entre secciones
+           ================================================ */
         
-        function irADemo() {
-            // Redirigir al quiz normal sin código
-            window.location.href = 'index.html';
+        function mostrarSeccion(seccionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            const seccion = document.getElementById(seccionId);
+            if (seccion) {
+                seccion.classList.add('active');
+                
+                // Si es la sección quiz, inicializar el quiz con preguntas.json
+                if (seccionId === 'quiz') {
+                    iniciarQuizDemo();
+                }
+                
+                // Si es la sección crear-preguntas, inicializar creación de preguntas
+                if (seccionId === 'crear-preguntas') {
+                    inicializarCrearPreguntas();
+                }
+                
+                // Si es la sección registro, inicializar formulario de registro
+                if (seccionId === 'registro') {
+                    inicializarRegistro();
+                }
+                
+                // Si es la sección login, inicializar formulario de login
+                if (seccionId === 'login') {
+                    inicializarLogin();
+                }
+                
+                // Scroll al top
+                window.scrollTo(0, 0);
+            }
         }
         
         function irALogin() {
-            // Próximamente: sistema de login
-            alert('🚧 Sistema de login en desarrollo.\n\nPor ahora, si ya creaste tu quiz, busca en tu email el link personalizado que te enviamos.');
+            mostrarSeccion('login');
+        }
+        
+        // Detectar hash en URL al cargar la página
+        window.addEventListener('load', () => {
+            const hash = window.location.hash.substring(1); // Eliminar el #
+            if (hash) {
+                // Extraer sección del hash (ej: "crear-preguntas?code=XXX" -> "crear-preguntas")
+                const seccionId = hash.split('?')[0];
+                if (seccionId && document.getElementById(seccionId)) {
+                    mostrarSeccion(seccionId);
+                }
+            }
+        });
+        
+        /* ================================================
+           SCRIPTS QUIZ - Lógica del quiz con preguntas.json
+           ================================================ */
+        
+        // Variables globales del quiz
+        let preguntasDemo = [];
+        let preguntaActual = 0;
+        let puntaje = 0;
+        let tiempoRestante = 10;
+        let timerInterval = null;
+        let tiempos = [];
+        let respuestasUsuario = [];
+        
+        // Variables para text-to-speech
+        let vocesDisponibles = [];
+        let vocesListas = false;
+        const SPEECH_AVAILABLE = 'speechSynthesis' in window;
+        
+        // ================================================
+        // SISTEMA TEXT-TO-SPEECH
+        // ================================================
+        
+        // Función para cargar voces disponibles
+        function cargarVoces() {
+            if (!SPEECH_AVAILABLE) return;
+            
+            vocesDisponibles = window.speechSynthesis.getVoices();
+            
+            if (vocesDisponibles.length > 0) {
+                vocesListas = true;
+                console.log('✅ Voces cargadas:', vocesDisponibles.length);
+                
+                // Mostrar voces en español disponibles
+                const vocesEspanol = vocesDisponibles.filter(v => v.lang.includes('es'));
+                if (vocesEspanol.length > 0) {
+                    console.log('🗣️ Voces en español:', vocesEspanol.map(v => v.name).join(', '));
+                }
+            } else {
+                console.log('⏳ Esperando voces...');
+            }
+        }
+        
+        // Cargar voces disponibles
+        if (SPEECH_AVAILABLE) {
+            setTimeout(cargarVoces, 100);
+            if (window.speechSynthesis.onvoiceschanged !== undefined) {
+                window.speechSynthesis.onvoiceschanged = cargarVoces;
+            }
+        } else {
+            console.warn('Web Speech API no disponible en este navegador');
+        }
+        
+        // Función para leer texto con voz
+        function leerTexto(texto) {
+            // Validar entrada
+            if (!texto || typeof texto !== 'string' || texto.trim() === '') {
+                console.warn('Texto inválido para síntesis de voz');
+                return;
+            }
+            
+            // Verificar disponibilidad de Speech API
+            if (!SPEECH_AVAILABLE) {
+                console.log('TTS no disponible:', texto);
+                return; // Silenciosamente no hacer nada
+            }
+            
+            try {
+                // Cancelar cualquier síntesis en progreso
+                window.speechSynthesis.cancel();
+                
+                setTimeout(() => {
+                    try {
+                        const utterance = new SpeechSynthesisUtterance(texto);
+                        utterance.lang = 'es-ES';
+                        utterance.rate = 1.0;
+                        utterance.pitch = 1.2;
+                        utterance.volume = 1;
+                        
+                        // Manejador de errores para utterance
+                        utterance.onerror = (event) => {
+                            // Ignorar error "interrupted" porque es normal
+                            if (event.error === 'interrupted') {
+                                return;
+                            }
+                            // Solo mostrar otros errores reales
+                            if (event.error !== 'canceled') {
+                                console.warn('⚠️ Error en síntesis de voz:', event.error);
+                            }
+                        };
+                        
+                        // Manejador de inicio
+                        utterance.onstart = () => {
+                            console.log('📢 Leyendo:', texto.substring(0, 50) + '...');
+                        };
+                        
+                        // Obtener voces actualizadas
+                        let voices = window.speechSynthesis.getVoices();
+                        
+                        // Si no hay voces, intentar recargar
+                        if (!voices || voices.length === 0) {
+                            console.log('Recargando voces...');
+                            cargarVoces();
+                            voices = window.speechSynthesis.getVoices();
+                        }
+                        
+                        if (voices && voices.length > 0) {
+                            // Buscar específicamente voz de Google Español
+                            const vozGoogle = voices.find(voice => 
+                                voice.name.toLowerCase().includes('google') && 
+                                (voice.lang.includes('es') || voice.name.toLowerCase().includes('español') || voice.name.toLowerCase().includes('spanish'))
+                            );
+                            
+                            // Si no encuentra Google, buscar cualquier voz en español
+                            const vozEspanol = voices.find(voice => voice.lang.includes('es'));
+                            
+                            if (vozGoogle) {
+                                utterance.voice = vozGoogle;
+                                console.log('🗣️ Usando voz:', vozGoogle.name);
+                            } else if (vozEspanol) {
+                                utterance.voice = vozEspanol;
+                                console.log('🗣️ Usando voz:', vozEspanol.name);
+                            } else {
+                                console.log('🗣️ Usando voz por defecto');
+                            }
+                        } else {
+                            console.warn('⚠️ No se encontraron voces disponibles');
+                        }
+                        
+                        window.speechSynthesis.speak(utterance);
+                    } catch (error) {
+                        console.warn('Error al leer:', error);
+                    }
+                }, 100);
+            } catch (error) {
+                console.warn('Error en leerTexto:', error);
+            }
+        }
+        
+        async function iniciarQuizDemo() {
+            // Preguntas por defecto (en caso de que falle el fetch)
+            const preguntasDefault = [
+                {
+                    pregunta: "¿Dónde fue nuestra primera cita?",
+                    opciones: { A: "Un restaurante", B: "En casa", C: "Kantrika" },
+                    correcta: "C"
+                },
+                {
+                    pregunta: "¿Cuál es mi color favorito?",
+                    opciones: { A: "Negro", B: "Rojo", C: "Verde" },
+                    correcta: "A"
+                },
+                {
+                    pregunta: "¿Cuál es nuestra canción favorita?",
+                    opciones: { A: "Un reguetón", B: "Una canción pop", C: "Una canción de rock" },
+                    correcta: "A"
+                },
+                {
+                    pregunta: "¿Qué me gusta hacer en mi tiempo libre?",
+                    opciones: { A: "Leer libros", B: "Estudiar", C: "Ver películas" },
+                    correcta: "B"
+                },
+                {
+                    pregunta: "¿Cuál es mi comida favorita?",
+                    opciones: { A: "Pizza", B: "Pasta", C: "Pollo" },
+                    correcta: "C"
+                },
+                {
+                    pregunta: "¿Qué lugar prefiero para vacacionar?",
+                    opciones: { A: "La playa", B: "La montaña", C: "La ciudad" },
+                    correcta: "A"
+                },
+                {
+                    pregunta: "¿Cuál es mi serie favorita?",
+                    opciones: { A: "Una comedia", B: "Un drama", C: "Acción" },
+                    correcta: "B"
+                },
+                {
+                    pregunta: "¿Qué tipo de música prefiero?",
+                    opciones: { A: "Pop", B: "Rock", C: "Reguetón" },
+                    correcta: "C"
+                },
+                {
+                    pregunta: "¿Cuál es mi forma favorita de relajarme?",
+                    opciones: { A: "Leer", B: "Dormir", C: "Ver TV" },
+                    correcta: "B"
+                },
+                {
+                    pregunta: "¿Qué valoro más en una relación?",
+                    opciones: { A: "Confianza", B: "Diversión", C: "Comunicación" },
+                    correcta: "A"
+                }
+            ];
+            
+            // Intentar cargar preguntas desde preguntas.json
+            try {
+                const response = await fetch('preguntas.json');
+                const data = await response.json();
+                preguntasDemo = data.preguntas;
+                console.log('✅ Preguntas cargadas desde preguntas.json');
+            } catch (error) {
+                console.warn('⚠️ No se pudo cargar preguntas.json, usando preguntas por defecto');
+                preguntasDemo = preguntasDefault;
+            }
+            
+            // Resetear variables
+            preguntaActual = 0;
+            puntaje = 0;
+            tiempos = [];
+            respuestasUsuario = [];
+            
+            // Mostrar pantalla de bienvenida del quiz
+            document.querySelector('#quiz #bienvenida').classList.add('active');
+            document.querySelector('#quiz #pregunta').classList.remove('active');
+            document.querySelector('#quiz #resultados').classList.remove('active');
+            
+            // Configurar botones
+            document.getElementById('btn-empezar').onclick = empezarQuizDemo;
+            document.getElementById('btn-reiniciar').onclick = reiniciarQuizDemo;
+            
+            // Configurar botón siguiente
+            const btnSiguiente = document.getElementById('btn-siguiente');
+            if (btnSiguiente) {
+                btnSiguiente.onclick = siguientePreguntaDemo;
+                // Deshabilitar inicialmente
+                btnSiguiente.disabled = true;
+                btnSiguiente.style.opacity = '0.5';
+                btnSiguiente.style.cursor = 'not-allowed';
+            }
+        }
+        
+        function empezarQuizDemo() {
+            document.querySelector('#quiz #bienvenida').classList.remove('active');
+            document.querySelector('#quiz #pregunta').classList.add('active');
+            mostrarPreguntaDemo();
+            iniciarAudio();
+        }
+        
+        function mostrarPreguntaDemo() {
+            if (preguntaActual >= preguntasDemo.length) {
+                mostrarResultadosDemo();
+                return;
+            }
+            
+            const pregunta = preguntasDemo[preguntaActual];
+            
+            // Actualizar número de pregunta
+            document.querySelector('#quiz .numero-pregunta').textContent = preguntaActual + 1;
+            
+            // Actualizar texto de pregunta
+            document.querySelector('#quiz .pregunta-texto').textContent = pregunta.pregunta;
+            
+            // Actualizar opciones
+            const botonesOpciones = document.querySelectorAll('#quiz .opcion-btn');
+            botonesOpciones[0].querySelector('.texto').textContent = pregunta.opciones.A;
+            botonesOpciones[1].querySelector('.texto').textContent = pregunta.opciones.B;
+            botonesOpciones[2].querySelector('.texto').textContent = pregunta.opciones.C;
+            
+            // Limpiar clases previas
+            botonesOpciones.forEach(btn => {
+                btn.classList.remove('correcta', 'incorrecta', 'disabled');
+                btn.disabled = false;
+            });
+            
+            // Agregar event listeners
+            botonesOpciones.forEach(btn => {
+                btn.onclick = () => seleccionarRespuestaDemo(btn.dataset.respuesta);
+            });
+            
+            // Actualizar puntaje
+            document.querySelector('#quiz .puntaje-numero').textContent = puntaje * 10;
+            
+            // Deshabilitar botón siguiente hasta que se responda
+            const btnSiguiente = document.getElementById('btn-siguiente');
+            if (btnSiguiente) {
+                btnSiguiente.disabled = true;
+                btnSiguiente.style.opacity = '0.5';
+                btnSiguiente.style.cursor = 'not-allowed';
+            }
+            
+            // Leer la pregunta con voz
+            setTimeout(() => {
+                leerTexto(pregunta.pregunta);
+            }, 500);
+            
+            // Iniciar timer
+            iniciarTimerDemo();
+        }
+        
+        function iniciarTimerDemo() {
+            tiempoRestante = 10;
+            const tiempoNumero = document.querySelector('#quiz .tiempo-numero');
+            const cronometroProgreso = document.querySelector('#quiz .cronometro-progreso');
+            
+            tiempoNumero.textContent = tiempoRestante;
+            
+            if (timerInterval) clearInterval(timerInterval);
+            
+            // Circunferencia del círculo (2 * PI * radio)
+            const circunferencia = 2 * Math.PI * 45;
+            cronometroProgreso.style.strokeDasharray = circunferencia;
+            cronometroProgreso.style.strokeDashoffset = 0;
+            
+            timerInterval = setInterval(() => {
+                tiempoRestante--;
+                tiempoNumero.textContent = tiempoRestante;
+                
+                // Animar el círculo SVG
+                const progreso = tiempoRestante / 10;
+                const offset = circunferencia * (1 - progreso);
+                cronometroProgreso.style.strokeDashoffset = offset;
+                
+                if (tiempoRestante <= 0) {
+                    clearInterval(timerInterval);
+                    seleccionarRespuestaDemo(null); // Tiempo agotado
+                }
+            }, 1000);
+        }
+        
+        function seleccionarRespuestaDemo(opcionElegida) {
+            clearInterval(timerInterval);
+            
+            // Cancelar voz si está hablando
+            if (SPEECH_AVAILABLE && window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+            
+            const pregunta = preguntasDemo[preguntaActual];
+            const tiempoUsado = 10 - tiempoRestante;
+            tiempos.push(tiempoUsado);
+            
+            const botonesOpciones = document.querySelectorAll('#quiz .opcion-btn');
+            
+            // Deshabilitar todas las opciones
+            botonesOpciones.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('disabled');
+            });
+            
+            // Marcar respuesta correcta e incorrecta
+            let textoRespuestaCorrecta = '';
+            botonesOpciones.forEach(btn => {
+                if (btn.dataset.respuesta === pregunta.correcta) {
+                    btn.classList.add('correcta');
+                    textoRespuestaCorrecta = btn.querySelector('.texto').textContent;
+                }
+                if (opcionElegida && btn.dataset.respuesta === opcionElegida && opcionElegida !== pregunta.correcta) {
+                    btn.classList.add('incorrecta');
+                }
+            });
+            
+            // Leer la respuesta correcta con voz
+            if (textoRespuestaCorrecta) {
+                setTimeout(() => {
+                    if (opcionElegida === pregunta.correcta) {
+                        leerTexto('Me conoces bien');
+                    } else if (opcionElegida === null) {
+                        leerTexto(`Se acabó el tiempo. La respuesta es: ${textoRespuestaCorrecta}`);
+                    } else {
+                        leerTexto(`Debemos hablar. Es ${textoRespuestaCorrecta}`);
+                    }
+                }, 300);
+            }
+            
+            // Verificar si es correcta
+            if (opcionElegida === pregunta.correcta) {
+                puntaje++;
+            }
+            
+            respuestasUsuario.push({
+                pregunta: pregunta.pregunta,
+                elegida: opcionElegida,
+                correcta: pregunta.correcta,
+                esCorrecta: opcionElegida === pregunta.correcta
+            });
+            
+            // Habilitar botón siguiente
+            const btnSiguiente = document.getElementById('btn-siguiente');
+            if (btnSiguiente) {
+                btnSiguiente.disabled = false;
+                btnSiguiente.style.opacity = '1';
+                btnSiguiente.style.cursor = 'pointer';
+            }
+        }
+        
+        function siguientePreguntaDemo() {
+            preguntaActual++;
+            
+            if (preguntaActual < preguntasDemo.length) {
+                // Hay más preguntas
+                mostrarPreguntaDemo();
+            } else {
+                // Quiz terminado
+                mostrarResultadosDemo();
+            }
+        }
+        
+        function mostrarResultadosDemo() {
+            document.querySelector('#quiz #pregunta').classList.remove('active');
+            document.querySelector('#quiz #resultados').classList.add('active');
+            
+            // Cancelar voz si está hablando
+            if (SPEECH_AVAILABLE && window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+            
+            const porcentaje = (puntaje / preguntasDemo.length) * 100;
+            const puntajeFinal = puntaje * 10;
+            const tiempoPromedio = tiempos.reduce((a, b) => a + b, 0) / tiempos.length;
+            
+            // Actualizar puntaje final
+            document.querySelector('#quiz .puntaje-final-numero').textContent = puntajeFinal;
+            
+            // Mensaje según puntuación (igual que script.js)
+            let mensaje;
+            if (puntajeFinal >= 80) {
+                mensaje = 'Felicidades, me conoces más de lo que crees… y por eso te amo aún más.';
+            } else if (puntajeFinal >= 50) {
+                mensaje = 'Vas bien, todavía nos queda toda una vida para conocernos mejor.';
+            } else {
+                mensaje = 'No importa el puntaje, lo importante es que te amo.';
+            }
+            
+            document.querySelector('#quiz .mensaje-resultado').textContent = mensaje;
+            
+            // Leer resultados con voz
+            setTimeout(() => {
+                leerTexto(`Has obtenido ${puntajeFinal} puntos. ${mensaje}`);
+            }, 500);
+            
+            pararAudio();
+        }
+        
+        function reiniciarQuizDemo() {
+            preguntaActual = 0;
+            puntaje = 0;
+            tiempos = [];
+            respuestasUsuario = [];
+            
+            document.querySelector('#quiz #resultados').classList.remove('active');
+            document.querySelector('#quiz #bienvenida').classList.add('active');
+        }
+        
+        function iniciarAudio() {
+            const audio = document.getElementById('audio-quiz');
+            if (audio) {
+                audio.volume = 0.3;
+                audio.loop = true;
+                audio.play().catch(err => console.log('Audio bloqueado por el navegador'));
+            }
+        }
+        
+        function pararAudio() {
+            const audio = document.getElementById('audio-quiz');
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        }
+        
+        /* ================================================
+           SCRIPTS CREAR PREGUNTAS - Gestión de preguntas personalizadas
+           ================================================ */
+        
+        let usuarioActual = null;
+        let quizCode = null;
+        
+        // Función para esperar a que supabaseQuiz esté disponible
+        function esperarSupabase(callback) {
+            console.log('⏳ Esperando supabaseQuiz...');
+            if (window.supabaseQuiz) {
+                console.log('✅ supabaseQuiz encontrado');
+                callback();
+            } else {
+                setTimeout(() => esperarSupabase(callback), 50);
+            }
+        }
+        
+        // Función para inicializar la sección crear-preguntas
+        function inicializarCrearPreguntas() {
+            console.log('🚀 Inicializando crear-preguntas');
+            console.log('📦 window.supabase:', typeof window.supabase);
+            console.log('📦 window.supabaseQuiz:', typeof window.supabaseQuiz);
+            
+            esperarSupabase(async () => {
+                console.log('🔍 Iniciando verificación de acceso...');
+                
+                // Verificar que supabaseQuiz está disponible
+                if (!window.supabaseQuiz) {
+                    console.error('❌ supabaseQuiz no está disponible');
+                    mostrarErrorAcceso('Error de configuración. Recarga la página.');
+                    return;
+                }
+                console.log('✅ supabaseQuiz disponible');
+                
+                // Obtener quiz_code de la URL (?code=xxxxx o hash #crear-preguntas?code=xxxxx)
+                const urlParams = new URLSearchParams(window.location.search);
+                quizCode = urlParams.get('code');
+                
+                // Si no está en query, buscar en hash
+                if (!quizCode && window.location.hash.includes('?')) {
+                    const hashParams = new URLSearchParams(window.location.hash.split('?')[1]);
+                    quizCode = hashParams.get('code');
+                }
+                
+                console.log('📝 Quiz code:', quizCode);
+                
+                if (!quizCode) {
+                    mostrarErrorAcceso('No se proporcionó un código de quiz válido.');
+                    return;
+                }
+                
+                // Verificar que el usuario existe y está activo
+                try {
+                    console.log('🔎 Buscando usuario con código:', quizCode);
+                    const { data, error } = await supabaseQuiz.client
+                        .from('usuarios')
+                        .select('*')
+                        .eq('quiz_code', quizCode)
+                        .single();
+                    
+                    console.log('📊 Respuesta de Supabase - data:', data, 'error:', error);
+                    
+                    if (error || !data) {
+                        console.error('❌ Error o usuario no encontrado:', error);
+                        mostrarErrorAcceso('Código de quiz no encontrado.');
+                        return;
+                    }
+                    
+                    if (!data.activo) {
+                        console.log('⏳ Usuario encontrado pero no activo');
+                        mostrarErrorAcceso('Tu pago aún no ha sido verificado. Te notificaremos por email cuando esté aprobado.');
+                        return;
+                    }
+                    
+                    console.log('✅ Usuario válido y activo:', data.nombre);
+                    usuarioActual = data;
+                    
+                    // Verificar si ya creó sus preguntas
+                    console.log('🔎 Verificando si ya tiene preguntas...');
+                    const { data: preguntasExistentes, error: errorPreguntas } = await supabaseQuiz.client
+                        .from('preguntas_personalizadas')
+                        .select('id')
+                        .eq('usuario_id', usuarioActual.id);
+                    
+                    console.log('📊 Preguntas existentes:', preguntasExistentes, 'error:', errorPreguntas);
+                    
+                    if (preguntasExistentes && preguntasExistentes.length > 0) {
+                        console.log('✅ Ya tiene preguntas, mostrando link');
+                        mostrarLinkFinal();
+                    } else {
+                        console.log('📝 No tiene preguntas, creando formulario');
+                        crearFormularioPreguntas();
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Error verificando acceso:', error);
+                    mostrarErrorAcceso('Error al verificar el acceso. Intenta de nuevo más tarde.');
+                }
+            });
+        }
+        
+        function mostrarErrorAcceso(mensaje) {
+            document.getElementById('loadingInicial').classList.remove('show');
+            document.getElementById('errorAccesoTexto').textContent = mensaje;
+            document.getElementById('errorAcceso').classList.add('show');
+        }
+        
+        function crearFormularioPreguntas() {
+            document.getElementById('loadingInicial').classList.remove('show');
+            document.getElementById('formularioPreguntas').style.display = 'block';
+            
+            const container = document.getElementById('preguntasContainer');
+            container.innerHTML = ''; // Limpiar contenedor
+            
+            for (let i = 1; i <= 10; i++) {
+                const card = document.createElement('div');
+                card.className = 'pregunta-card';
+                card.innerHTML = `
+                    <div class="pregunta-numero">${i}</div>
+                    
+                    <div class="form-group">
+                        <label>Pregunta ${i} *</label>
+                        <textarea id="pregunta-${i}" required placeholder="Ej: ¿Cuál es mi color favorito?"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Opciones de Respuesta</label>
+                        <div class="opciones-grid">
+                            <div class="opcion-group">
+                                <div class="opcion-label">A</div>
+                                <input type="text" id="opcion-${i}-a" class="opcion-input" required placeholder="Primera opción">
+                            </div>
+                            <div class="opcion-group">
+                                <div class="opcion-label">B</div>
+                                <input type="text" id="opcion-${i}-b" class="opcion-input" required placeholder="Segunda opción">
+                            </div>
+                            <div class="opcion-group">
+                                <div class="opcion-label">C</div>
+                                <input type="text" id="opcion-${i}-c" class="opcion-input" required placeholder="Tercera opción">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Respuesta Correcta *</label>
+                        <div class="correcta-select">
+                            <div class="radio-option">
+                                <input type="radio" id="correcta-${i}-a" name="correcta-${i}" value="A" required>
+                                <label for="correcta-${i}-a">A</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="correcta-${i}-b" name="correcta-${i}" value="B">
+                                <label for="correcta-${i}-b">B</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="correcta-${i}-c" name="correcta-${i}" value="C">
+                                <label for="correcta-${i}-c">C</label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+                
+                // Agregar listener para actualizar progreso
+                const inputs = card.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('input', actualizarProgreso);
+                });
+            }
+            
+            // Configurar submit del formulario
+            document.getElementById('formPreguntas').onsubmit = guardarPreguntas;
+        }
+        
+        function actualizarProgreso() {
+            let completadas = 0;
+            
+            for (let i = 1; i <= 10; i++) {
+                const pregunta = document.getElementById(`pregunta-${i}`)?.value.trim();
+                const opcionA = document.getElementById(`opcion-${i}-a`)?.value.trim();
+                const opcionB = document.getElementById(`opcion-${i}-b`)?.value.trim();
+                const opcionC = document.getElementById(`opcion-${i}-c`)?.value.trim();
+                const correcta = document.querySelector(`input[name="correcta-${i}"]:checked`);
+                
+                if (pregunta && opcionA && opcionB && opcionC && correcta) {
+                    completadas++;
+                }
+            }
+            
+            const porcentaje = (completadas / 10) * 100;
+            document.getElementById('progressBar').style.width = porcentaje + '%';
+            document.getElementById('progressText').textContent = `${completadas} de 10 completadas`;
+        }
+        
+        async function guardarPreguntas(e) {
+            e.preventDefault();
+            
+            const btnGuardar = document.getElementById('btnGuardar');
+            btnGuardar.disabled = true;
+            btnGuardar.textContent = 'Guardando...';
+            
+            try {
+                const preguntas = [];
+                
+                for (let i = 1; i <= 10; i++) {
+                    const pregunta = document.getElementById(`pregunta-${i}`).value.trim();
+                    const opcionA = document.getElementById(`opcion-${i}-a`).value.trim();
+                    const opcionB = document.getElementById(`opcion-${i}-b`).value.trim();
+                    const opcionC = document.getElementById(`opcion-${i}-c`).value.trim();
+                    const correcta = document.querySelector(`input[name="correcta-${i}"]:checked`).value;
+                    
+                    preguntas.push({
+                        pregunta: pregunta,
+                        opciones: {
+                            A: opcionA,
+                            B: opcionB,
+                            C: opcionC
+                        },
+                        correcta: correcta
+                    });
+                }
+                
+                const guardado = await supabaseQuiz.guardarPreguntasPersonalizadas(usuarioActual.id, preguntas);
+                
+                if (guardado) {
+                    console.log('✅ Preguntas guardadas exitosamente');
+                    mostrarLinkFinal();
+                } else {
+                    throw new Error('No se pudieron guardar las preguntas');
+                }
+                
+            } catch (error) {
+                console.error('Error guardando preguntas:', error);
+                alert('Hubo un error al guardar las preguntas. Por favor intenta de nuevo.');
+                btnGuardar.disabled = false;
+                btnGuardar.textContent = 'Guardar Quiz y Obtener Link 🎉';
+            }
+        }
+        
+        function mostrarLinkFinal() {
+            document.getElementById('loadingInicial').classList.remove('show');
+            const baseURL = window.location.origin + window.location.pathname.replace('index.html', '');
+            const linkCompleto = `${baseURL}index.html#quiz?code=${quizCode}`;
+            
+            document.getElementById('formularioPreguntas').style.display = 'none';
+            document.getElementById('linkFinal').textContent = linkCompleto;
+            document.getElementById('successScreen').classList.add('show');
+        }
+        
+        function copiarLink() {
+            const link = document.getElementById('linkFinal').textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                alert('✅ Link copiado al portapapeles');
+            }).catch(() => {
+                alert('No se pudo copiar. Link: ' + link);
+            });
+        }
+        
+        function compartirWhatsApp() {
+            const link = document.getElementById('linkFinal').textContent;
+            const mensaje = `🎁 ¡Hola! Preparé un quiz especial para ti.\n\n🔗 Respóndelo aquí: ${link}\n\n¿Qué tanto me conoces? 💕`;
+            const whatsappURL = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+            window.open(whatsappURL, '_blank');
+        }
+        
+        /* ================================================
+           SCRIPTS REGISTRO - Gestión de registro de usuarios
+           ================================================ */
+        
+        let datosUsuarioReg = {};
+        let archivoComprobanteReg = null;
+        
+        // Función para inicializar la sección de registro
+        function inicializarRegistro() {
+            console.log('🚀 Inicializando registro');
+            
+            // Resetear formulario
+            datosUsuarioReg = {};
+            archivoComprobanteReg = null;
+            
+            // Limpiar campos
+            const nombreInput = document.getElementById('nombre-reg');
+            const emailInput = document.getElementById('email-reg');
+            const metodoPagoSelect = document.getElementById('metodo-pago-reg');
+            const numeroOperacionInput = document.getElementById('numero-operacion-reg');
+            const comprobanteInput = document.getElementById('comprobante-reg');
+            const fileNameDiv = document.getElementById('fileName-reg');
+            
+            if (nombreInput) nombreInput.value = '';
+            if (emailInput) emailInput.value = '';
+            if (metodoPagoSelect) metodoPagoSelect.value = '';
+            if (numeroOperacionInput) numeroOperacionInput.value = '';
+            if (comprobanteInput) comprobanteInput.value = '';
+            if (fileNameDiv) fileNameDiv.textContent = 'JPG, PNG - Máx 5MB';
+            
+            // Volver al paso 1
+            cambiarPasoReg(1);
+            
+            // Configurar event listeners
+            const formDatos = document.getElementById('form-datos-reg');
+            if (formDatos) {
+                formDatos.onsubmit = function(e) {
+                    e.preventDefault();
+                    
+                    datosUsuarioReg.nombre = document.getElementById('nombre-reg').value.trim();
+                    datosUsuarioReg.email = document.getElementById('email-reg').value.trim();
+                    
+                    if (!datosUsuarioReg.nombre || !datosUsuarioReg.email) {
+                        mostrarErrorReg('Por favor completa todos los campos');
+                        return;
+                    }
+                    
+                    cambiarPasoReg(2);
+                };
+            }
+            
+            const comprobanteInputEl = document.getElementById('comprobante-reg');
+            if (comprobanteInputEl) {
+                comprobanteInputEl.onchange = function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        if (file.size > 5 * 1024 * 1024) {
+                            mostrarErrorReg('El archivo es muy grande. Máximo 5MB');
+                            e.target.value = '';
+                            return;
+                        }
+                        archivoComprobanteReg = file;
+                        document.getElementById('fileName-reg').textContent = file.name;
+                    }
+                };
+            }
+            
+            const formPago = document.getElementById('form-pago-reg');
+            if (formPago) {
+                formPago.onsubmit = async function(e) {
+                    e.preventDefault();
+                    
+                    const metodoPago = document.getElementById('metodo-pago-reg').value;
+                    const numeroOperacion = document.getElementById('numero-operacion-reg').value.trim();
+                    
+                    if (!metodoPago || !numeroOperacion || !archivoComprobanteReg) {
+                        mostrarErrorReg('Por favor completa todos los campos y sube el comprobante');
+                        return;
+                    }
+                    
+                    datosUsuarioReg.metodoPago = metodoPago;
+                    datosUsuarioReg.numeroOperacion = numeroOperacion;
+                    
+                    // Registrar usuario
+                    await registrarUsuarioReg();
+                };
+            }
+        }
+        
+        async function registrarUsuarioReg() {
+            mostrarLoadingReg(true);
+            ocultarErrorReg();
+            
+            try {
+                // Generar código único
+                const quizCode = await supabaseQuiz.generarCodigoUnico();
+                
+                if (!quizCode) {
+                    throw new Error('No se pudo generar el código del quiz');
+                }
+                
+                // Subir comprobante a Supabase Storage
+                let comprobanteUrl = null;
+                try {
+                    const fileName = `${quizCode}_${Date.now()}.${archivoComprobanteReg.name.split('.').pop()}`;
+                    const { data, error } = await supabaseQuiz.client.storage
+                        .from('comprobantes')
+                        .upload(fileName, archivoComprobanteReg);
+                    
+                    if (error) throw error;
+                    
+                    // Obtener URL pública
+                    const { data: urlData } = supabaseQuiz.client.storage
+                        .from('comprobantes')
+                        .getPublicUrl(fileName);
+                    
+                    comprobanteUrl = urlData.publicUrl;
+                } catch (storageError) {
+                    console.warn('Error subiendo comprobante a storage:', storageError);
+                    comprobanteUrl = 'pendiente_subida';
+                }
+                
+                // Crear usuario en base de datos
+                const usuario = await supabaseQuiz.crearUsuario({
+                    nombre: datosUsuarioReg.nombre,
+                    email: datosUsuarioReg.email,
+                    quizCode: quizCode,
+                    metodoPago: datosUsuarioReg.metodoPago,
+                    numeroOperacion: datosUsuarioReg.numeroOperacion,
+                    comprobanteUrl: comprobanteUrl
+                });
+                
+                if (!usuario) {
+                    throw new Error('No se pudo crear el usuario');
+                }
+                
+                console.log('✅ Usuario registrado:', usuario);
+                
+                mostrarLoadingReg(false);
+                cambiarPasoReg(3);
+                
+            } catch (error) {
+                console.error('❌ Error registrando usuario:', error);
+                mostrarErrorReg('Hubo un error al procesar tu registro: ' + error.message);
+                mostrarLoadingReg(false);
+            }
+        }
+        
+        function cambiarPasoReg(paso) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('#registro .form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar sección actual
+            document.getElementById('paso' + paso + '-reg').classList.add('active');
+            
+            // Actualizar indicadores
+            for (let i = 1; i <= 3; i++) {
+                const indicator = document.getElementById('step' + i + '-indicator-reg');
+                indicator.classList.remove('active', 'complete');
+                
+                if (i < paso) {
+                    indicator.classList.add('complete');
+                } else if (i === paso) {
+                    indicator.classList.add('active');
+                }
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function volverPaso1Reg() {
+            cambiarPasoReg(1);
+        }
+        
+        function mostrarErrorReg(mensaje) {
+            const errorDiv = document.getElementById('errorMessageReg');
+            errorDiv.textContent = mensaje;
+            errorDiv.classList.add('show');
+            
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 5000);
+        }
+        
+        function ocultarErrorReg() {
+            document.getElementById('errorMessageReg').classList.remove('show');
+        }
+        
+        function mostrarLoadingReg(show) {
+            const loading = document.getElementById('loadingReg');
+            if (show) {
+                loading.classList.add('show');
+            } else {
+                loading.classList.remove('show');
+            }
+        }
+        
+        function irALoginDesdeRegistro() {
+            mostrarSeccion('login');
+        }
+        
+        /* ================================================
+           SCRIPTS LOGIN - Gestión de inicio de sesión
+           ================================================ */
+        
+        // Función para inicializar la sección de login
+        function inicializarLogin() {
+            console.log('🚀 Inicializando login');
+            
+            // Limpiar campos
+            const emailInput = document.getElementById('email-login');
+            const codigoInput = document.getElementById('codigo-login');
+            
+            if (emailInput) emailInput.value = '';
+            if (codigoInput) codigoInput.value = '';
+            
+            ocultarErrorLogin();
+            mostrarLoadingLogin(false);
+            
+            // Configurar event listener del formulario
+            const formLogin = document.getElementById('form-login');
+            if (formLogin) {
+                formLogin.onsubmit = async function(e) {
+                    e.preventDefault();
+                    await procesarLogin();
+                };
+            }
+        }
+        
+        async function procesarLogin() {
+            const email = document.getElementById('email-login').value.trim();
+            const codigo = document.getElementById('codigo-login').value.trim().toUpperCase();
+            
+            // Validar que al menos uno esté lleno
+            if (!email && !codigo) {
+                mostrarErrorLogin('Por favor ingresa tu email o código de quiz');
+                return;
+            }
+            
+            mostrarLoadingLogin(true);
+            ocultarErrorLogin();
+            
+            try {
+                let usuario = null;
+                
+                // Buscar por código primero si se proporcionó
+                if (codigo) {
+                    console.log('🔎 Buscando por código:', codigo);
+                    const { data, error } = await supabaseQuiz.client
+                        .from('usuarios')
+                        .select('*')
+                        .eq('quiz_code', codigo)
+                        .single();
+                    
+                    if (data) {
+                        usuario = data;
+                        console.log('✅ Usuario encontrado por código');
+                    } else {
+                        console.log('❌ No se encontró usuario con ese código');
+                    }
+                }
+                
+                // Si no se encontró por código, buscar por email
+                if (!usuario && email) {
+                    console.log('🔎 Buscando por email:', email);
+                    const { data, error } = await supabaseQuiz.client
+                        .from('usuarios')
+                        .select('*')
+                        .eq('email', email)
+                        .single();
+                    
+                    if (data) {
+                        usuario = data;
+                        console.log('✅ Usuario encontrado por email');
+                    } else {
+                        console.log('❌ No se encontró usuario con ese email');
+                    }
+                }
+                
+                // Validar si se encontró el usuario
+                if (!usuario) {
+                    mostrarLoadingLogin(false);
+                    mostrarErrorLogin('No se encontró una cuenta con esos datos. Verifica e intenta de nuevo.');
+                    return;
+                }
+                
+                // Verificar si el usuario está activo
+                if (!usuario.activo) {
+                    mostrarLoadingLogin(false);
+                    mostrarErrorLogin('Tu pago aún no ha sido verificado. Te notificaremos por email cuando esté aprobado.');
+                    return;
+                }
+                
+                console.log('✅ Login exitoso:', usuario.nombre);
+                
+                // Login exitoso - redirigir a crear preguntas
+                mostrarLoadingLogin(false);
+                
+                // Actualizar URL con el código y redirigir
+                window.location.hash = `crear-preguntas?code=${usuario.quiz_code}`;
+                mostrarSeccion('crear-preguntas');
+                
+            } catch (error) {
+                console.error('❌ Error en login:', error);
+                mostrarLoadingLogin(false);
+                mostrarErrorLogin('Hubo un error al verificar tus datos. Intenta de nuevo.');
+            }
+        }
+        
+        function mostrarErrorLogin(mensaje) {
+            const errorDiv = document.getElementById('errorMessageLogin');
+            errorDiv.textContent = mensaje;
+            errorDiv.classList.add('show');
+            
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 5000);
+        }
+        
+        function ocultarErrorLogin() {
+            document.getElementById('errorMessageLogin').classList.remove('show');
+        }
+        
+        function mostrarLoadingLogin(show) {
+            const loading = document.getElementById('loadingLogin');
+            if (show) {
+                loading.classList.add('show');
+            } else {
+                loading.classList.remove('show');
+            }
         }
     </script>
-    
+
 </body>
 </html>

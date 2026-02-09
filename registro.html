@@ -301,7 +301,7 @@
 <body>
     
     <div class="container">
-        <a href="landing.html" class="back-btn">← Volver</a>
+        <a href="index.html" class="back-btn">← Volver</a>
         
         <div class="header">
             <h1>Crear Mi Quiz 💝</h1>
@@ -389,16 +389,14 @@
         <!-- PASO 3: Confirmación -->
         <div class="form-section" id="paso3">
             <div class="success-message">
-                <h2>¡Registro Exitoso! 🎉</h2>
-                <p style="margin: 15px 0;">Tu cuenta ha sido creada correctamente.</p>
-                <p><strong>Código de Quiz:</strong> <span id="quizCode" style="font-family: monospace; font-size: 1.2rem; color: #667eea;"></span></p>
-                <p style="margin-top: 20px; font-size: 0.9rem;">
-                    Tu pago está en <strong>revisión</strong>. Te notificaremos por email cuando sea aprobado.
-                    Una vez aprobado, podrás crear tus 10 preguntas personalizadas.
+                <h2>¡Pago Aprobado! ✅ 💖</h2>
+                <p style="margin: 15px 0;">Tu cuenta ha sido creada correctamente y tu pago fue verificado.</p>
+                <p style="margin-top: 20px; font-size: 0.95rem;">
+                    ¡Todo listo! 🎉 Ya puedes iniciar sesión para crear tu quiz personalizado.
                 </p>
             </div>
             
-            <button class="btn" onclick="window.location.href='landing.html'">Volver al Inicio</button>
+            <button class="btn" onclick="irALogin()">Iniciar Sesión</button>
         </div>
     </div>
     
@@ -503,8 +501,8 @@
                 
                 console.log('✅ Usuario registrado:', usuario);
                 
-                // Mostrar código en paso 3
-                document.getElementById('quizCode').textContent = quizCode;
+                // Ya no mostramos el código en el paso 3
+                // document.getElementById('quizCode').textContent = quizCode;
                 
                 mostrarLoading(false);
                 cambiarPaso(3);
@@ -566,6 +564,13 @@
             } else {
                 loading.classList.remove('show');
             }
+        }
+        
+        function irALogin() {
+            // Por ahora, mostrar mensaje de que el sistema de login está en desarrollo
+            alert('🚧 Sistema de login en desarrollo.\n\nTe enviaremos un email con las instrucciones para acceder a tu quiz.');
+            // Después redirigir al inicio
+            window.location.href = 'index.html';
         }
     </script>
     
