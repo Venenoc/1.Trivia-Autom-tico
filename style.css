@@ -1517,46 +1517,62 @@ h1 {
 
 /* iOS - Secciones Login, Registro y Crear Preguntas */
 @supports (-webkit-touch-callout: none) {
+    /* Asegurar que las secciones puedan scrollear completamente en iOS */
+    .section {
+        height: auto !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+    }
+    
     /* Formulario de login en iOS - empieza arriba */
     #login {
         align-items: flex-start !important;
         padding-top: max(20px, env(safe-area-inset-top)) !important;
-        padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+        padding-bottom: max(80px, calc(env(safe-area-inset-bottom) + 60px)) !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        height: auto !important;
     }
     
     #login .login-container {
         margin-top: 0 !important;
-        margin-bottom: 20px;
+        margin-bottom: 60px !important;
     }
     
     /* Formulario de registro en iOS - empieza arriba */
     #registro {
         align-items: flex-start !important;
         padding-top: max(20px, env(safe-area-inset-top)) !important;
-        padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+        padding-bottom: max(80px, calc(env(safe-area-inset-bottom) + 60px)) !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        height: auto !important;
     }
     
     #registro .registro-container {
         margin-top: 0 !important;
-        margin-bottom: 20px;
+        margin-bottom: 60px !important;
     }
     
     /* Formulario de crear preguntas en iOS - empieza arriba */
     #crear-preguntas {
         align-items: flex-start !important;
         padding-top: max(20px, env(safe-area-inset-top)) !important;
-        padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+        padding-bottom: max(80px, calc(env(safe-area-inset-bottom) + 60px)) !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        height: auto !important;
     }
     
     #crear-preguntas .crear-container {
         margin-top: 0 !important;
-        margin-bottom: 20px;
+        margin-bottom: 60px !important;
     }
 }
 
