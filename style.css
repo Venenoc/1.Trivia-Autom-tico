@@ -1517,11 +1517,24 @@ h1 {
 
 /* iOS - Secciones Login, Registro y Crear Preguntas */
 @supports (-webkit-touch-callout: none) {
+    /* Asegurar scroll del body en iOS */
+    body {
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        height: auto !important;
+    }
+    
     /* Asegurar que las secciones puedan scrollear completamente en iOS */
     .section {
+        position: relative !important;
         height: auto !important;
         min-height: 100vh !important;
         min-height: 100dvh !important;
+        overflow-y: visible !important;
+    }
+    
+    .section.active {
+        position: relative !important;
     }
     
     /* Formulario de login en iOS - empieza arriba */
@@ -1529,7 +1542,7 @@ h1 {
         align-items: flex-start !important;
         padding-top: max(20px, env(safe-area-inset-top)) !important;
         padding-bottom: max(80px, calc(env(safe-area-inset-bottom) + 60px)) !important;
-        overflow-y: auto !important;
+        overflow-y: visible !important;
         -webkit-overflow-scrolling: touch;
         min-height: 100vh !important;
         min-height: 100dvh !important;
@@ -1546,7 +1559,7 @@ h1 {
         align-items: flex-start !important;
         padding-top: max(20px, env(safe-area-inset-top)) !important;
         padding-bottom: max(80px, calc(env(safe-area-inset-bottom) + 60px)) !important;
-        overflow-y: auto !important;
+        overflow-y: visible !important;
         -webkit-overflow-scrolling: touch;
         min-height: 100vh !important;
         min-height: 100dvh !important;
@@ -1563,7 +1576,7 @@ h1 {
         align-items: flex-start !important;
         padding-top: max(20px, env(safe-area-inset-top)) !important;
         padding-bottom: max(80px, calc(env(safe-area-inset-bottom) + 60px)) !important;
-        overflow-y: auto !important;
+        overflow-y: visible !important;
         -webkit-overflow-scrolling: touch;
         min-height: 100vh !important;
         min-height: 100dvh !important;
