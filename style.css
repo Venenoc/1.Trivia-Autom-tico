@@ -1829,6 +1829,19 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow-y: auto;
+}
+
+@media (max-width: 600px) {
+    #crear-preguntas {
+        align-items: flex-start;
+        padding: 20px 15px;
+        padding-top: 20px;
+    }
+    
+    #crear-preguntas .crear-container {
+        margin-top: 0;
+    }
 }
 
 #crear-preguntas .crear-container {
